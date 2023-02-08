@@ -1,4 +1,11 @@
-package j-parser;
+package j-parser.types;
+
+import j-parser.attributes.*;
+import j-parser.methods.*;
+import j-parser.constants.*;
+import j-parser.fields.*
+import j-parser.types.*;
+
 import java.util.HashMap;
 
 public class ClassFile{
