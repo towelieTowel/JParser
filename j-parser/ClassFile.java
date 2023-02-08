@@ -4,7 +4,7 @@ import java.util.HashMap;
 public class ClassFile{
     /*
         Tables are implemented as instances of java.util.HashMap<k,V>. Key is a short which serves like an index into an array. 
-        Value is an instance of a class that implements one of the generic interfaces: Constant, Method, Field, Attribute.
+        Value is an instance of a class that is a child of one of the parent classes:Attribute, Constant, Field, Method.
     */
     protected int magic;
     protected short minorVersion;
@@ -28,6 +28,7 @@ public class ClassFile{
         Constructed with the .class file to be parsed. All fields should be initialized during construction and the instance getters provide a public api into the file's data.
         */
     }
+
     public int getMagic(){return this.magic}
     public short getMinorVersion(){return this.minorVersion;}
     public short getMajorVersion(){return this.majorVersion;}
