@@ -4,17 +4,17 @@ import JParser.j_parser.constants.ConstantTag;
 import JParser.j_parser.interfaces.Constant;
 
 public final class ConstantClass implements Constant{
-    private final byte tag = ConstantTag.CLASS.tag;
-    private final String type = ConstantTag.CLASS.name();
-    private final short nameIndex; 
+    private final byte TAG = ConstantTag.CLASS.tag;
+    private final String TYPE = ConstantTag.CLASS.name();
+    private final short NAME_INDEX; 
 
     public ConstantClass(short nameIndex){
-        this.nameIndex = nameIndex;
+        this.NAME_INDEX = nameIndex;
     }
     
     @Override
     public String getType(){
         /*Required by Constant interface*/
-        return this.type;
+        return this.TYPE;
     }
 }

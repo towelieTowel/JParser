@@ -4,19 +4,19 @@ import JParser.j_parser.interfaces.Constant;
 import JParser.j_parser.constants.ConstantTag;
 
 public final class ConstantUTF implements Constant{
-    private final byte tag = ConstantTag.UTF.tag;
-    private final String type = ConstantTag.UTF.name();
-    private final short len;
-    private final byte[] bytes;
+    private final byte TAG = ConstantTag.UTF.tag;
+    private final String TYPE = ConstantTag.UTF.name();
+    private final short LEN;
+    private final byte[] BYTES;
 
     public ConstantUTF(short len, byte[] bytes)
-        this.len = len;
-        this.bytes = bytes;
+        this.LEN = len;
+        this.BYTES = bytes;
     }
 
     @Override
     public String getType(){
         /*Required by Constant interface*/
-        return this.type;
+        return this.TYPE;
     }
 }

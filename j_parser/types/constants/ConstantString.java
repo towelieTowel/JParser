@@ -6,16 +6,15 @@ import JParser.j_parser.interfaces.Constant;
 public final class ConstantString{
     private final byte TAG = ConstantTag.STRING.tag;
     private final String TYPE = ConstantTag.STRING.name();
-    
-    private short stringIndex;
+    private final short STRING_INDEX;
     
     public ConstantString(short stringIndex){
-        this.stringIndex = stringIndex;
+        this.STRING_INDEX = stringIndex;
     }
 
     @Override
     public String getType(){
-        return this.type;
+        return this.TYPE;
     }
 }
 
