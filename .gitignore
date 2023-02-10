@@ -1,4 +1,7 @@
 *.
+*.swp
+*.swo
 !.gitignore
 /j_parser/TODO
 test/
+
