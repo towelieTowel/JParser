@@ -2,6 +2,6 @@
 *.swp
 *.swo
 !.gitignore
-TODO
+j_parser/TODO
 test/
 
