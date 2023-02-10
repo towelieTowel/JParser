@@ -5,7 +5,7 @@ import JParser.j_parser.constants.ConstantTag;
 
 public final class ConstantUTF implements Constant{
     private final byte tag = ConstantTag.UTF.tag;
-    private final String name = ConstantTag.UTF.name();
+    private final String type = ConstantTag.UTF.name();
     private final short len;
     private final byte[] bytes;
 
@@ -17,6 +17,6 @@ public final class ConstantUTF implements Constant{
     @Override
     public String getType(){
         /*Required by Constant interface*/
-        return this.name;
+        return this.type;
     }
 }
