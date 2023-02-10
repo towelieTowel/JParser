@@ -17,11 +17,6 @@ import java.io.IOException;
 import java.io.DataInputStream;
 
 public class ClassFile{
-    /*
-        Tables are implemented as instances of java.util.HashMap<k,V>. Key is a short which serves like an index into an array. 
-        Value is an instance of a class that is a child of one of the parent classes:Attribute, Constant, Field, Method.
-    */
- 
     private final int magicNumber;
     private final short minorVersion;
     private final short majorVersion;
@@ -47,11 +42,13 @@ public class ClassFile{
 */
     public ClassFile(File classFile) throws IOException{
         DataInputStream fileStream = new DataInputStream(new FileInputStream(classFile));
+
         this.magicNumber = fileStream.readInt();
         this.minorVersion = fileStream.readShort();
         this.majorVersion = fileStream.readShort();
         this.constantPoolCount = fileStream.readShort();
     }
+
     public int getMagicNumber(){return this.magicNumber;}
     public short getMinorVersion(){return this.minorVersion;}
     public short getMajorVersion(){return this.majorVersion;}
@@ -72,12 +69,12 @@ public class ClassFile{
 
 */
     public static void main(String[] args) throws IOException{
-        final String PATH = "/home/dragon/javaClasses/JParser/test/Test.class";
-        final byte[] byteStream;    
+        final String PATH = "/home/dragon/javaClasses/JParser/test/Test.class";    
         final File file;
         
         file = new File(PATH);
         ClassFile myClassFile = new ClassFile(file);
+
         System.out.println("Magic Number:" + Integer.toHexString(myClassFile.getMagicNumber())); 
         System.out.println("Minor Version:" + Integer.toHexString(myClassFile.getMinorVersion()));
         System.out.println("Major Version:" + Integer.toHexString(myClassFile.getMajorVersion()));
