@@ -1,0 +1,15 @@
+Class file format specification: https://docs.oracle.com/javase/specs/jvms/se19/html/jvms-4.html
+
+Token: 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
+
+1. Create main class file structure
+2. Create classes to represent constants in a constants package
+3. Create class for field_info structure
+4. Create classes for attributes in a attributes package
+5. Create Parser class //This is the actual parser
+    1. *To save for later
+
+
+
+
+
