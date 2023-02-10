@@ -1,6 +1,6 @@
 Class file format specification: https://docs.oracle.com/javase/specs/jvms/se19/html/jvms-4.html
 
-Token: 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
+Token: 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
 
 1. Create main class file structure
 2. Create classes to represent constants in a constants package
