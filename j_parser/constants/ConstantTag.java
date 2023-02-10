@@ -1,3 +1,5 @@
+package JParser.j_parser.constants;
+
 public enum ConstantTag{
 /*Enumeration to map all constant pool tags to the type of constant*/
     UTF8(1),	
