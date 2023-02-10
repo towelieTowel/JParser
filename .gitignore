@@ -1,4 +1,4 @@
 *.
 !.gitignore
-/j-parser/TODO
+/j_parser/TODO
 test/
