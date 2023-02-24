@@ -1,4 +1,4 @@
-package JParser.j_parser.types;
+package JParser.j_parser;
 /*
 import j-parser.attributes.*;
 import j-parser.methods.*;
@@ -69,7 +69,7 @@ public class ClassFile{
 
 */
     public static void main(String[] args) throws IOException{
-        final String PATH = "/home/dragon/javaClasses/JParser/test/Test.class";    
+        final String PATH = args[0];   
         final File file;
         
         file = new File(PATH);
