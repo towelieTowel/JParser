@@ -1,4 +1,4 @@
-package JParser.j_parser.interfaces;
+package j_parser.interfaces;
 
 /*Interface for all constant pool types*/
 public interface Constant{
