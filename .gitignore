@@ -3,6 +3,7 @@
 *.swo
 *.class
 !.gitignore
+.token
 j_parser/TODO
 test/
 
