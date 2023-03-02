@@ -8,7 +8,7 @@ final public class ConstantClass implements Constant{
     private final short NAME_INDEX; 
     private final String COMMON_NAME = ConstantTag.CLASS.name();
 
-    public ConstantClass(int nameIndex){
+    public ConstantClass(short nameIndex){
         this.NAME_INDEX = nameIndex;
     }
     
