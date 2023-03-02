@@ -1,22 +1,35 @@
-package JParser.j_parser.types.constants;
+package j_parser.types.constants;
 
-import JParser.j_parser.interfaces.Constant;
-import JParser.j_parser.constants.ConstantTag;
+import j_parser.interfaces.Constant;
+import j_parser.constants.ConstantTag;
 
 public final class ConstantUTF implements Constant{
-    private final byte TAG = ConstantTag.UTF.tag;
-    private final String TYPE = ConstantTag.UTF.name();
+    private final int TAG = ConstantTag.UTF.TAG;
     private final short LEN;
-    private final byte[] BYTES;
+    private final String VALUE;
+    private final String TYPE = ConstantTag.UTF.name();
 
-    public ConstantUTF(short len, byte[] bytes)
+    public ConstantUTF(short len, String value)
         this.LEN = len;
-        this.BYTES = bytes;
+        this.VALUE = value;
+    }
+
+    public short getLen(){
+        return this.LEN;
+    }
+
+    public String getValue(){
+        return this.VALUE;
     }
 
     @Override
-    public String getType(){
+    public String getCommonName(){
         /*Required by Constant interface*/
-        return this.TYPE;
+        return this.COMMON_NAME;
+    }
+
+    @Override
+    public int getTag(){
+        return this.TAG;
     }
 }
