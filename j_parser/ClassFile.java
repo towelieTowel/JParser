@@ -12,7 +12,7 @@ public class ClassFile{
     private final short minorVersion;
     private final short majorVersion;
     private final short constantPoolCount;
-//    private final Constant [] constantPool;
+    private final Constant[] constantPool;
 /*
     private final short accessFlags;
     private final short thisClass;
@@ -40,21 +40,8 @@ public class ClassFile{
     public short getMinorVersion(){return this.minorVersion;}
     public short getMajorVersion(){return this.majorVersion;}
     public short getConstantPoolCount(){return this.constantPoolCount;}
-/*
-   // public HashMap<> getConstants(short id){return this.constantPool;}
-    public short getAccessFlags(){return this.accessFlags;}
-    public short getThisClass(){return this.thisClass;}
-    public short getSuperClass(){return this.superClass;}
-    public short getInterfacesCount(){return this.interfacesCount;}
-    public short[] getInterfaces(){return this.interfaces;}
-    public short getFieldsCount(){return this.fieldsCount;}
-//    public HashMap<> getFields(){return this.fields;}
-    public short getMethodsCount(){return this.methodsCount;}
-  //  public HashMap<> getMethods(){return this.methods;}
-    public short getAttributesCount(){return this.attributesCount;}
-//    public HashMap<> getAttributes(){return this.attributes;}
+    
 
-*/
     public static void main(String[] args) throws IOException{
         final String PATH = args[0];   
         final File file;
