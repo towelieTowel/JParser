@@ -1,20 +1,29 @@
-package JParser.j_parser.types.constants;
+package j_parser.types.constants;
 
-import JParser.j_parser.constants.ConstantTag;
-import JParser.j_parser.interfaces.Constant;
+import j_parser.constants.ConstantTag;
+import j_parser.interfaces.Constant;
 
 public final class ConstantString implements Constant{
-    private final byte TAG = ConstantTag.STRING.tag;
-    private final String TYPE = ConstantTag.STRING.name();
+    private final int TAG = ConstantTag.STRING.TAG;
     private final short STRING_INDEX;
+    private final String TYPE = ConstantTag.STRING.name();
     
     public ConstantString(short stringIndex){
         this.STRING_INDEX = stringIndex;
     }
 
+    public short getStringIndex(){
+        return this.STRING_INDEX;
+    }
+
     @Override
-    public String getType(){
-        return this.TYPE;
+    public String getCommonName(){
+        return this.COMMON_NAME;
+    }
+
+    @Override
+    public int getTag(){
+        return this.TAG;
     }
 }
 
