@@ -1,15 +1,6 @@
-package JParser.j_parser.types;
-/*
-import j-parser.attributes.*;
-import j-parser.methods.*;
-import j-parser.constants.*;
-import j-parser.fields.*
-import j-parser.types.*;
-*/
+package j_parser;
 
 import java.lang.Integer;
-import java.util.HashMap;
-import java.util.Arrays;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -21,6 +12,7 @@ public class ClassFile{
     private final short minorVersion;
     private final short majorVersion;
     private final short constantPoolCount;
+//    private final Constant [] constantPool;
 /*
     private final short accessFlags;
     private final short thisClass;
@@ -29,16 +21,11 @@ public class ClassFile{
     private final short interfacesCount;
     private short[] interfaces;
     private short fieldsCount;
-//    private HashMap<short, Field> fields;
+    private HashMap<short, Field> fields;
     private short methodsCount;
-//    private HashMap<short, Method> methods;
+    private HashMap<short, Method> methods;
     private short attributesCount;
-//    private HashMap<short, Attribute> attributes;
-    
-    private class constantPool{
-       // Models the constant_pool table. Provides and api into that pool
-       // private ArrayList<Constant>
-    }
+    private HashMap<short, Attribute> attributes;
 */
     public ClassFile(File classFile) throws IOException{
         DataInputStream fileStream = new DataInputStream(new FileInputStream(classFile));
@@ -69,16 +56,16 @@ public class ClassFile{
 
 */
     public static void main(String[] args) throws IOException{
-        final String PATH = "/home/dragon/javaClasses/JParser/test/Test.class";    
+        final String PATH = args[0];   
         final File file;
         
         file = new File(PATH);
         ClassFile myClassFile = new ClassFile(file);
 
         System.out.println("Magic Number:" + Integer.toHexString(myClassFile.getMagicNumber())); 
-        System.out.println("Minor Version:" + Integer.toHexString(myClassFile.getMinorVersion()));
-        System.out.println("Major Version:" + Integer.toHexString(myClassFile.getMajorVersion()));
-        System.out.println("Constant Pool Count:" + Integer.toHexString(myClassFile.getConstantPoolCount()));
+        System.out.println("Minor Version:" + myClassFile.getMinorVersion());
+        System.out.println("Major Version:" + myClassFile.getMajorVersion());
+        System.out.println("Constant Pool Count:" + myClassFile.getConstantPoolCount());
     } 
       
 }
