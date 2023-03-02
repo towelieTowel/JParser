@@ -1,22 +1,36 @@
-package JParser.j_parser.types.constants;
+package j_parser.types.constants;
 
-import JParser.j_parser.interfaces.Constant;
-import JParser.j_parser.constants.ConstantTag;
+import j_parser.interfaces.Constant;
+import j_parser.constants.ConstantTag;
 
-public final class ConstantFieldRef{
-    private final byte TAG = ConstantTag.FIELDREF.tag;
-    private final String TYPE = ConstantTag.FIELDREF.name();
+public final class ConstantFieldRef implements Constant{
+    private final int TAG = ConstantTag.FIELDREF.TAG;
     private final short CLASS_INDEX;
     private final short NT_INDEX;
+    private final String COMMON_NAME = ConstantTag.FIELDREF.name();
 
     public ConstantFieldRef(short classIndex, short NTIndex){
         this.CLASS_INDEX = classIndex;
         this.NT_INDEX = NTIndex;
     }
 
+    public short getClassIndex(){
+        return this.CLASS_INDEX;
+    }
+
+    public short getNTIndex(){
+        return this.NT_INDEX;
+    }
+
     @Override
-    public String getType(){
+    public int getTag(){
         /*Required by Constant interface*/
-        return this.TYPE;
+        return this.TAG;
+    }
+    
+    @Override
+    public String getCommonName(){
+        /*Required by Constant interface*/
+        reuturn this.COMMON_NAME;
     }
 }
