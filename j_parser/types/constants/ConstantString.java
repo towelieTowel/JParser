@@ -1,6 +1,6 @@
 package j_parser.types.constants;
 
-import j_parser.constants.ConstantTag;
+import j_parser.enums.ConstantTag;
 import j_parser.interfaces.Constant;
 
 public final class ConstantString implements Constant{

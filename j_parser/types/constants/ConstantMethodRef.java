@@ -1,7 +1,7 @@
 package j_parser.types.constants;
 
 import j_parser.interfaces.Constant;
-import j_parser.constants.ConstantTag;
+import j_parser.enums.ConstantTag;
 
 public final class ConstantMethodRef implements Constant{
     private final int TAG = ConstantTag.METHODREF.TAG;
@@ -22,13 +22,13 @@ public final class ConstantMethodRef implements Constant{
         return this.NT_INDEX;
     }
 
-    @Overrides
+    @Override
     public String getCommonName(){
         /*Required by Constant interface*/
         return this.COMMON_NAME;
     }
     
-    @Overrides
+    @Override
     public int getTag(){
         return this.TAG;
     }

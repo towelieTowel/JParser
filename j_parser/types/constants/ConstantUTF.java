@@ -1,7 +1,7 @@
 package j_parser.types.constants;
 
 import j_parser.interfaces.Constant;
-import j_parser.constants.ConstantTag;
+import j_parser.enums.ConstantTag;
 
 public final class ConstantUTF implements Constant{
     private final int TAG = ConstantTag.UTF.TAG;
@@ -17,10 +17,6 @@ public final class ConstantUTF implements Constant{
 
     public short getLen(){
         return this.LEN;
-    }
-
-    public String getValue(){
-        return this.VALUE;
     }
 
     @Override
