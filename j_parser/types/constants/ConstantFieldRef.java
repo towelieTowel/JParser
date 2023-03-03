@@ -9,9 +9,9 @@ public final class ConstantFieldRef implements Constant{
     private final short NT_INDEX;
     private final String COMMON_NAME = ConstantTag.FIELDREF.name();
 
-    public ConstantFieldRef(short classIndex, short NTIndex){
+    public ConstantFieldRef(short classIndex, short ntIndex){
         this.CLASS_INDEX = classIndex;
-        this.NT_INDEX = NTIndex;
+        this.NT_INDEX = ntIndex;
     }
 
     public short getClassIndex(){

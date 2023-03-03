@@ -8,7 +8,7 @@ final public class ConstantFloat implements Constant{
     private final float VALUE;
     private final String COMMON_NAME = ConstantTag.FLOAT.name();
 
-    public ConstantInteger(int value){
+    public ConstantInteger(float value){
         this.VALUE = value;
     }
 

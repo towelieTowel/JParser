@@ -6,12 +6,13 @@ import j_parser.constants.ConstantTag;
 public final class ConstantUTF implements Constant{
     private final int TAG = ConstantTag.UTF.TAG;
     private final short LEN;
-    private final String VALUE;
+    private final byte[] BYTES;
     private final String TYPE = ConstantTag.UTF.name();
 
-    public ConstantUTF(short len, String value)
+    public ConstantUTF(short len, byte[] bytes)
         this.LEN = len;
-        this.VALUE = value;
+        this.BYTES = new byte[len];
+        this.BYTES = bytes;
     }
 
     public short getLen(){
