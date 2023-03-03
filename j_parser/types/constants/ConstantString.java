@@ -6,7 +6,7 @@ import j_parser.interfaces.Constant;
 public final class ConstantString implements Constant{
     private final int TAG = ConstantTag.STRING.TAG;
     private final short STRING_INDEX;
-    private final String TYPE = ConstantTag.STRING.name();
+    private final String COMMON_NAME = ConstantTag.STRING.name();
     
     public ConstantString(short stringIndex){
         this.STRING_INDEX = stringIndex;
