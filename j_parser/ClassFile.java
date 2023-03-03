@@ -52,78 +52,80 @@ public class ClassFile{
                     if (tag.name() == "UTF"){
                         short len = fileStream.readShort();
                         byte[] data = new byte[len];
-                        constantPool[i] = new ConstantUTF(len, data); 
+                        fileStream.read(data, 0, len);
+
+                        this.constantPool[i] = new ConstantUTF(len, data);
                     } 
                     if (tag.name() == "INTEGER"){
                         int value = fileStream.readInt();
-                        constantPool[i] = new ConstantInteger(value); 
+                        this.constantPool[i] = new ConstantInteger(value); 
                     }
                     if (tag.name() == "FLOAT"){
                         float value = fileStream.readFloat();
-                        constantPool[i] = new ConstantFloat(value);
+                        this.constantPool[i] = new ConstantFloat(value);
                     }
                     if (tag.name() == "LONG"){
                         long value = fileStream.readLong();
-                        constantPool[i] = new ConstantLong(value);
+                        this.constantPool[i] = new ConstantLong(value);
                     }
                     if (tag.name() == "DOUBLE"){
                         double value = fileStream.readDouble();
-                        constantPool[i] = new ConstantDouble(value);
+                        this.constantPool[i] = new ConstantDouble(value);
                     }
                     if (tag.name() == "CLASS"){
                         short nameIndex = fileStream.readShort();
-                        constantPool[i] = new ConstantClass(nameIndex);
+                        this.constantPool[i] = new ConstantClass(nameIndex);
                     }
                     if (tag.name() == "STRING"){
                         short stringIndex = fileStream.readShort();
-                        constantPool[i] = new ConstantString(stringIndex);
+                        this.constantPool[i] = new ConstantString(stringIndex);
                     }
                     if (tag.name() == "FIELDREF"){
                         short classIndex = fileStream.readShort();
                         short ntIndex = fileStream.readShort();
-                        constantPool[i] = new ConstantFieldRef(classIndex, ntIndex);
+                        this.constantPool[i] = new ConstantFieldRef(classIndex, ntIndex);
                     }
                     if (tag.name() == "METHODREF"){
                         short classIndex = fileStream.readShort();
                         short ntIndex = fileStream.readShort();
-                        constantPool[i] = new ConstantMethodRef(classIndex, ntIndex);
+                        this.constantPool[i] = new ConstantMethodRef(classIndex, ntIndex);
                     }
                     if (tag.name() == "INTERFACE_METHODREF"){
                         short classIndex = fileStream.readShort();
                         short ntIndex = fileStream.readShort();
-                        constantPool[i] = new ConstantMethodRef(classIndex, ntIndex); 
+                        this.constantPool[i] = new ConstantMethodRef(classIndex, ntIndex); 
                     }
                     if (tag.name() == "NAMEANDTYPE"){
                         short nameIndex = fileStream.readShort();
                         short descriptorIndex = fileStream.readShort();
-                        constantPool[i] = new ConstantNameAndType(nameIndex, descriptorIndex);
+                        this.constantPool[i] = new ConstantNameAndType(nameIndex, descriptorIndex);
                     }
                     if (tag.name() == "METHODHANDLE"){
                         short refKind = fileStream.readShort();
                         short index = fileStream.readShort();
-                        constantPool[i] = new ConstantMethodHandle(refKind, index);
+                        this.constantPool[i] = new ConstantMethodHandle(refKind, index);
                     }
                     if (tag.name() == "METHODTYPE"){
                         short descriptorIndex = fileStream.readShort();
-                        constantPool[i] = new ConstantMethodType(descriptorIndex);
+                        this.constantPool[i] = new ConstantMethodType(descriptorIndex);
                     }
                     if (tag.name() == "DYNAMIC"){
                         short bootstrapMethodAttrIndex = fileStream.readShort();
                         short ntIndex = fileStream.readShort();
-                        constantPool[i] = new ConstantDynamic(bootstrapMethodAttrIndex, ntIndex);
+                        this.constantPool[i] = new ConstantDynamic(bootstrapMethodAttrIndex, ntIndex);
                     }
                     if (tag.name() == "INVOKEDYNAMIC"){
                         short bootstrapMethodAttrIndex = fileStream.readShort();
                         short ntIndex = fileStream.readShort();
-                        constantPool[i] = new ConstantInvokeDynamic(bootstrapMethodAttrIndex, ntIndex);
+                        this.constantPool[i] = new ConstantInvokeDynamic(bootstrapMethodAttrIndex, ntIndex);
                     }
                     if (tag.name() == "MODULE"){
                         short nameIndex = fileStream.readShort();
-                        constantPool[i] = new ConstantModule(nameIndex);
+                        this.constantPool[i] = new ConstantModule(nameIndex);
                     }
                     if (tag.name() == "PACKAGE"){
                         short nameIndex = fileStream.readShort();
-                        constantPool[i] = new ConstantPackage(nameIndex);
+                        this.constantPool[i] = new ConstantPackage(nameIndex);
                     }
                 }
             } 
@@ -134,7 +136,17 @@ public class ClassFile{
     public short getMinorVersion(){return this.minorVersion;}
     public short getMajorVersion(){return this.majorVersion;}
     public short getConstantPoolCount(){return this.constantPoolCount;}
-    
+
+    public void printConstantCommonNames(){
+        int counter = 0;
+        for (Constant c : this.constantPool){
+            if (c != null){
+                ++counter;
+                System.out.println(c.getCommonName());
+            }
+        } 
+        System.out.println(counter);
+    }
 
     public static void main(String[] args) throws IOException{
         final String PATH = args[0];   
@@ -147,6 +159,8 @@ public class ClassFile{
         System.out.println("Minor Version:" + myClassFile.getMinorVersion());
         System.out.println("Major Version:" + myClassFile.getMajorVersion());
         System.out.println("Constant Pool Count:" + myClassFile.getConstantPoolCount());
+
+        myClassFile.printConstantCommonNames();
     } 
       
 }
