@@ -17,6 +17,10 @@ public final class ConstantUTF implements Constant{
     public short getLen(){
         return this.LEN;
     }
+    
+    public byte[] getBytes(){
+        return this.BYTES;
+    }
 
     @Override
     public String getCommonName(){

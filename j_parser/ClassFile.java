@@ -148,6 +148,18 @@ public class ClassFile{
         System.out.println(counter);
     }
 
+    public void printUTFStrings(){
+        for (Constant c : this.constantPool){
+            if (c != null){
+                if (c.getCommonName() == "UTF"){
+                    ConstantUTF utfObj = (ConstantUTF)c;
+                    String utfString = new String(utfObj.getBytes());
+                    System.out.println(utfString);
+                }
+            }
+        }
+    }
+
     public static void main(String[] args) throws IOException{
         final String PATH = args[0];   
         final File file;
@@ -161,6 +173,7 @@ public class ClassFile{
         System.out.println("Constant Pool Count:" + myClassFile.getConstantPoolCount());
 
         myClassFile.printConstantCommonNames();
+        myClassFile.printUTFStrings();
     } 
       
 }
