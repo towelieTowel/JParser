@@ -9,7 +9,7 @@ public final class ConstantUTF implements Constant{
     private final byte[] BYTES;
     private final String TYPE = ConstantTag.UTF.name();
 
-    public ConstantUTF(short len, byte[] bytes)
+    public ConstantUTF(short len, byte[] bytes){
         this.LEN = len;
         this.BYTES = new byte[len];
         this.BYTES = bytes;

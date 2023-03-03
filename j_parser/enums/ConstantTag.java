@@ -1,4 +1,4 @@
-package j_parser.constants;
+package j_parser.enums;
 
 public enum ConstantTag{
 /*Enumeration to map all constant pool tags to the type of constant*/
@@ -20,7 +20,7 @@ public enum ConstantTag{
     MODULE(19),	
     PACKAGE(20);	
 
-    final int TAG;
+    public final int TAG;
 
     ConstantTag(int tag){
         this.TAG = tag;

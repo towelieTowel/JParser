@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.DataInputStream;
 
 import j_parser.enums.ConstantTag;
+import j_parser.types.constants.*;
+import j_parser.interfaces.Constant;
 
 public class ClassFile{
     private final int magicNumber;
@@ -33,9 +35,9 @@ public class ClassFile{
         DataInputStream fileStream = new DataInputStream(new FileInputStream(classFile));
 
         this.magicNumber = fileStream.readInt();
-        this.minorVersion = fileStream.readUnsignedShort();
-        this.majorVersion = fileStream.readUnsignedShort();
-        this.constantPoolCount = fileStream.readUnsignedShort();
+        this.minorVersion = fileStream.readShort();
+        this.majorVersion = fileStream.readShort();
+        this.constantPoolCount = fileStream.readShort();
         this.constantPool = new Constant[this.constantPoolCount];
     
         /* 
@@ -48,7 +50,7 @@ public class ClassFile{
             for (ConstantTag tag : ConstantTag.values()){
                 if (currentTag == tag.TAG){
                     if (tag.name() == "UTF"){
-                        short len = fileStream.readUnsignedShort();
+                        short len = fileStream.readShort();
                         byte[] data = new byte[len];
                         constantPool[i] = new ConstantUTF(len, data); 
                     } 
@@ -69,58 +71,58 @@ public class ClassFile{
                         constantPool[i] = new ConstantDouble(value);
                     }
                     if (tag.name() == "CLASS"){
-                        short nameIndex = fileStream.readUnsignedShort();
+                        short nameIndex = fileStream.readShort();
                         constantPool[i] = new ConstantClass(nameIndex);
                     }
                     if (tag.name() == "STRING"){
-                        short stringIndex = fileStream.readUnsignedShort();
+                        short stringIndex = fileStream.readShort();
                         constantPool[i] = new ConstantString(stringIndex);
                     }
                     if (tag.name() == "FIELDREF"){
-                        short classIndex = fileStream.readUnsignedShort();
-                        short ntIndex = fileStream.readUnsignedShort();
+                        short classIndex = fileStream.readShort();
+                        short ntIndex = fileStream.readShort();
                         constantPool[i] = new ConstantFieldRef(classIndex, ntIndex);
                     }
                     if (tag.name() == "METHODREF"){
-                        short classIndex = fileStream.readUnsignedShort();
-                        short ntIndex = fileStream.readUnsignedShort();
+                        short classIndex = fileStream.readShort();
+                        short ntIndex = fileStream.readShort();
                         constantPool[i] = new ConstantMethodRef(classIndex, ntIndex);
                     }
                     if (tag.name() == "INTERFACE_METHODREF"){
-                        short classIndex = fileStream.readUnsignedShort();
-                        short ntIndex = fileStream.readUnsignedShort();
+                        short classIndex = fileStream.readShort();
+                        short ntIndex = fileStream.readShort();
                         constantPool[i] = new ConstantMethodRef(classIndex, ntIndex); 
                     }
                     if (tag.name() == "NAMEANDTYPE"){
-                        short nameIndex = fileStream.readUnsignedShort();
-                        short descriptorIndex = fileStream.readUnsignedShort();
+                        short nameIndex = fileStream.readShort();
+                        short descriptorIndex = fileStream.readShort();
                         constantPool[i] = new ConstantNameAndType(nameIndex, descriptorIndex);
                     }
                     if (tag.name() == "METHODHANDLE"){
-                        short refKind = fileStream.readUnsignedShort();
-                        short index = fileStream.readUnsignedShort();
+                        short refKind = fileStream.readShort();
+                        short index = fileStream.readShort();
                         constantPool[i] = new ConstantMethodHandle(refKind, index);
                     }
                     if (tag.name() == "METHODTYPE"){
-                        short descriptorIndex = fileStream.readUnsignedShort();
+                        short descriptorIndex = fileStream.readShort();
                         constantPool[i] = new ConstantMethodType(descriptorIndex);
                     }
                     if (tag.name() == "DYNAMIC"){
-                        short bootstrapMethodAttrIndex = fileStream.readUnsignedShort();
-                        short ntIndex = fileStream.readUnsignedShort();
+                        short bootstrapMethodAttrIndex = fileStream.readShort();
+                        short ntIndex = fileStream.readShort();
                         constantPool[i] = new ConstantDynamic(bootstrapMethodAttrIndex, ntIndex);
                     }
                     if (tag.name() == "INVOKEDYNAMIC"){
-                        short bootstrapMethodAttrIndex = fileStream.readUnsignedShort();
-                        short ntIndex = fileStream.readUnsignedShort();
+                        short bootstrapMethodAttrIndex = fileStream.readShort();
+                        short ntIndex = fileStream.readShort();
                         constantPool[i] = new ConstantInvokeDynamic(bootstrapMethodAttrIndex, ntIndex);
                     }
                     if (tag.name() == "MODULE"){
-                        short nameIndex = fileStream.readUnsignedShort();
+                        short nameIndex = fileStream.readShort();
                         constantPool[i] = new ConstantModule(nameIndex);
                     }
                     if (tag.name() == "PACKAGE"){
-                        short nameIndex = fileStream.readUnsignedShort();
+                        short nameIndex = fileStream.readShort();
                         constantPool[i] = new ConstantPackage(nameIndex);
                     }
                 }

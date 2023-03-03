@@ -31,6 +31,6 @@ public final class ConstantFieldRef implements Constant{
     @Override
     public String getCommonName(){
         /*Required by Constant interface*/
-        reuturn this.COMMON_NAME;
+        return this.COMMON_NAME;
     }
 }
