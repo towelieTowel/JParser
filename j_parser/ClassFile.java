@@ -35,9 +35,9 @@ public class ClassFile{
         DataInputStream fileStream = new DataInputStream(new FileInputStream(classFile));
 
         this.magicNumber = fileStream.readInt();
-        this.minorVersion = fileStream.readShort();
-        this.majorVersion = fileStream.readShort();
-        this.constantPoolCount = fileStream.readShort();
+        this.minorVersion = (short)fileStream.readUnsignedShort();
+        this.majorVersion = (short)fileStream.readUnsignedShort();
+        this.constantPoolCount = (short)fileStream.readUnsignedShort();
         this.constantPool = new Constant[this.constantPoolCount];
     
         /* 
@@ -50,7 +50,7 @@ public class ClassFile{
             for (ConstantTag tag : ConstantTag.values()){
                 if (currentTag == tag.TAG){
                     if (tag.name() == "UTF"){
-                        short len = fileStream.readShort();
+                        short len = (short)fileStream.readUnsignedShort();
                         byte[] data = new byte[len];
                         fileStream.read(data, 0, len);
 
@@ -73,58 +73,58 @@ public class ClassFile{
                         this.constantPool[i] = new ConstantDouble(value);
                     }
                     if (tag.name() == "CLASS"){
-                        short nameIndex = fileStream.readShort();
+                        short nameIndex = (short)fileStream.readUnsignedShort();
                         this.constantPool[i] = new ConstantClass(nameIndex);
                     }
                     if (tag.name() == "STRING"){
-                        short stringIndex = fileStream.readShort();
+                        short stringIndex = (short)fileStream.readUnsignedShort();
                         this.constantPool[i] = new ConstantString(stringIndex);
                     }
                     if (tag.name() == "FIELDREF"){
-                        short classIndex = fileStream.readShort();
-                        short ntIndex = fileStream.readShort();
+                        short classIndex = (short)fileStream.readUnsignedShort();
+                        short ntIndex = (short)fileStream.readUnsignedShort();
                         this.constantPool[i] = new ConstantFieldRef(classIndex, ntIndex);
                     }
                     if (tag.name() == "METHODREF"){
-                        short classIndex = fileStream.readShort();
-                        short ntIndex = fileStream.readShort();
+                        short classIndex = (short)fileStream.readUnsignedShort();
+                        short ntIndex = (short)fileStream.readUnsignedShort();
                         this.constantPool[i] = new ConstantMethodRef(classIndex, ntIndex);
                     }
                     if (tag.name() == "INTERFACE_METHODREF"){
-                        short classIndex = fileStream.readShort();
-                        short ntIndex = fileStream.readShort();
+                        short classIndex = (short)fileStream.readUnsignedShort();
+                        short ntIndex = (short)fileStream.readUnsignedShort();
                         this.constantPool[i] = new ConstantMethodRef(classIndex, ntIndex); 
                     }
                     if (tag.name() == "NAMEANDTYPE"){
-                        short nameIndex = fileStream.readShort();
-                        short descriptorIndex = fileStream.readShort();
+                        short nameIndex = (short)fileStream.readUnsignedShort();
+                        short descriptorIndex = (short)fileStream.readUnsignedShort();
                         this.constantPool[i] = new ConstantNameAndType(nameIndex, descriptorIndex);
                     }
                     if (tag.name() == "METHODHANDLE"){
-                        short refKind = fileStream.readShort();
-                        short index = fileStream.readShort();
+                        short refKind = (short)fileStream.readUnsignedShort();
+                        short index = (short)fileStream.readUnsignedShort();
                         this.constantPool[i] = new ConstantMethodHandle(refKind, index);
                     }
                     if (tag.name() == "METHODTYPE"){
-                        short descriptorIndex = fileStream.readShort();
+                        short descriptorIndex = (short)fileStream.readUnsignedShort();
                         this.constantPool[i] = new ConstantMethodType(descriptorIndex);
                     }
                     if (tag.name() == "DYNAMIC"){
-                        short bootstrapMethodAttrIndex = fileStream.readShort();
-                        short ntIndex = fileStream.readShort();
+                        short bootstrapMethodAttrIndex = (short)fileStream.readUnsignedShort();
+                        short ntIndex = (short)fileStream.readUnsignedShort();
                         this.constantPool[i] = new ConstantDynamic(bootstrapMethodAttrIndex, ntIndex);
                     }
                     if (tag.name() == "INVOKEDYNAMIC"){
-                        short bootstrapMethodAttrIndex = fileStream.readShort();
-                        short ntIndex = fileStream.readShort();
+                        short bootstrapMethodAttrIndex = (short)fileStream.readUnsignedShort();
+                        short ntIndex = (short)fileStream.readUnsignedShort();
                         this.constantPool[i] = new ConstantInvokeDynamic(bootstrapMethodAttrIndex, ntIndex);
                     }
                     if (tag.name() == "MODULE"){
-                        short nameIndex = fileStream.readShort();
+                        short nameIndex = (short)fileStream.readUnsignedShort();
                         this.constantPool[i] = new ConstantModule(nameIndex);
                     }
                     if (tag.name() == "PACKAGE"){
-                        short nameIndex = fileStream.readShort();
+                        short nameIndex = (short)fileStream.readUnsignedShort();
                         this.constantPool[i] = new ConstantPackage(nameIndex);
                     }
                 }
