@@ -53,88 +53,88 @@ public class ClassFile{
 
         for (int i = 1; i <= this.constantPoolCount - 1; ++i){
             int currentTag = fileStream.readUnsignedByte();
-            for (ConstantTag tag : ConstantTag.values()){
-                if (currentTag == tag.TAG){
-                    if (tag.name() == "UTF"){
-                        short len = (short)fileStream.readUnsignedShort();
-                        byte[] data = new byte[len];
-                        fileStream.read(data, 0, len);
+            
+            if (currentTag == ConstantTag.UTF.TAG){
+                short len = (short)fileStream.readUnsignedShort();
+                byte[] data = new byte[len];
+                fileStream.read(data, 0, len);
 
-                        this.constantPool[i] = new ConstantUTF(len, data);
-                    } 
-                    if (tag.name() == "INTEGER"){
-                        int value = fileStream.readInt();
-                        this.constantPool[i] = new ConstantInteger(value); 
-                    }
-                    if (tag.name() == "FLOAT"){
-                        float value = fileStream.readFloat();
-                        this.constantPool[i] = new ConstantFloat(value);
-                    }
-                    if (tag.name() == "LONG"){
-                        long value = fileStream.readLong();
-                        this.constantPool[i] = new ConstantLong(value);
-                    }
-                    if (tag.name() == "DOUBLE"){
-                        double value = fileStream.readDouble();
-                        this.constantPool[i] = new ConstantDouble(value);
-                    }
-                    if (tag.name() == "CLASS"){
-                        short nameIndex = (short)fileStream.readUnsignedShort();
-                        this.constantPool[i] = new ConstantClass(nameIndex);
-                    }
-                    if (tag.name() == "STRING"){
-                        short stringIndex = (short)fileStream.readUnsignedShort();
-                        this.constantPool[i] = new ConstantString(stringIndex);
-                    }
-                    if (tag.name() == "FIELDREF"){
-                        short classIndex = (short)fileStream.readUnsignedShort();
-                        short ntIndex = (short)fileStream.readUnsignedShort();
-                        this.constantPool[i] = new ConstantFieldRef(classIndex, ntIndex);
-                    }
-                    if (tag.name() == "METHODREF"){
-                        short classIndex = (short)fileStream.readUnsignedShort();
-                        short ntIndex = (short)fileStream.readUnsignedShort();
-                        this.constantPool[i] = new ConstantMethodRef(classIndex, ntIndex);
-                    }
-                    if (tag.name() == "INTERFACE_METHODREF"){
-                        short classIndex = (short)fileStream.readUnsignedShort();
-                        short ntIndex = (short)fileStream.readUnsignedShort();
-                        this.constantPool[i] = new ConstantMethodRef(classIndex, ntIndex); 
-                    }
-                    if (tag.name() == "NAMEANDTYPE"){
-                        short nameIndex = (short)fileStream.readUnsignedShort();
-                        short descriptorIndex = (short)fileStream.readUnsignedShort();
-                        this.constantPool[i] = new ConstantNameAndType(nameIndex, descriptorIndex);
-                    }
-                    if (tag.name() == "METHODHANDLE"){
-                        short refKind = (short)fileStream.readUnsignedShort();
-                        short index = (short)fileStream.readUnsignedShort();
-                        this.constantPool[i] = new ConstantMethodHandle(refKind, index);
-                    }
-                    if (tag.name() == "METHODTYPE"){
-                        short descriptorIndex = (short)fileStream.readUnsignedShort();
-                        this.constantPool[i] = new ConstantMethodType(descriptorIndex);
-                    }
-                    if (tag.name() == "DYNAMIC"){
-                        short bootstrapMethodAttrIndex = (short)fileStream.readUnsignedShort();
-                        short ntIndex = (short)fileStream.readUnsignedShort();
-                        this.constantPool[i] = new ConstantDynamic(bootstrapMethodAttrIndex, ntIndex);
-                    }
-                    if (tag.name() == "INVOKEDYNAMIC"){
-                        short bootstrapMethodAttrIndex = (short)fileStream.readUnsignedShort();
-                        short ntIndex = (short)fileStream.readUnsignedShort();
-                        this.constantPool[i] = new ConstantInvokeDynamic(bootstrapMethodAttrIndex, ntIndex);
-                    }
-                    if (tag.name() == "MODULE"){
-                        short nameIndex = (short)fileStream.readUnsignedShort();
-                        this.constantPool[i] = new ConstantModule(nameIndex);
-                    }
-                    if (tag.name() == "PACKAGE"){
-                        short nameIndex = (short)fileStream.readUnsignedShort();
-                        this.constantPool[i] = new ConstantPackage(nameIndex);
-                    }
-                }
+                this.constantPool[i] = new ConstantUTF(len, data);
             } 
+            else if (currentTag == ConstantTag.INTEGER.TAG){
+                int value = fileStream.readInt();
+                this.constantPool[i] = new ConstantInteger(value); 
+            }
+            else if (currentTag == ConstantTag.FLOAT.TAG){
+                float value = fileStream.readFloat();
+                this.constantPool[i] = new ConstantFloat(value);
+            }
+            else if (currentTag == ConstantTag.LONG.TAG){
+                long value = fileStream.readLong();
+                this.constantPool[i] = new ConstantLong(value);
+            }
+            else if (currentTag == ConstantTag.DOUBLE.TAG){
+                double value = fileStream.readDouble();
+                this.constantPool[i] = new ConstantDouble(value);
+            }
+            else if (currentTag == ConstantTag.CLASS.TAG){
+                short nameIndex = (short)fileStream.readUnsignedShort();
+                this.constantPool[i] = new ConstantClass(nameIndex);
+            }
+            else if (currentTag == ConstantTag.STRING.TAG){
+                short stringIndex = (short)fileStream.readUnsignedShort();
+                this.constantPool[i] = new ConstantString(stringIndex);
+            }
+            else if (currentTag == ConstantTag.FIELDREF.TAG){
+                short classIndex = (short)fileStream.readUnsignedShort();
+                short ntIndex = (short)fileStream.readUnsignedShort();
+                this.constantPool[i] = new ConstantFieldRef(classIndex, ntIndex);
+            }
+            else if (currentTag == ConstantTag.METHODREF.TAG){
+                short classIndex = (short)fileStream.readUnsignedShort();
+                short ntIndex = (short)fileStream.readUnsignedShort();
+                this.constantPool[i] = new ConstantMethodRef(classIndex, ntIndex);
+            }
+            else if (currentTag == ConstantTag.INTERFACE_METHODREF.TAG){
+                short classIndex = (short)fileStream.readUnsignedShort();
+                short ntIndex = (short)fileStream.readUnsignedShort();
+                this.constantPool[i] = new ConstantMethodRef(classIndex, ntIndex); 
+            }
+            else if (currentTag == ConstantTag.NAMEANDTYPE.TAG){
+                short nameIndex = (short)fileStream.readUnsignedShort();
+                short descriptorIndex = (short)fileStream.readUnsignedShort();
+                this.constantPool[i] = new ConstantNameAndType(nameIndex, descriptorIndex);
+            }
+            else if (currentTag == ConstantTag.METHODHANDLE.TAG){
+                short refKind = (short)fileStream.readUnsignedShort();
+                short index = (short)fileStream.readUnsignedShort();
+                this.constantPool[i] = new ConstantMethodHandle(refKind, index);
+            }
+            else if (currentTag == ConstantTag.METHODTYPE.TAG){
+                short descriptorIndex = (short)fileStream.readUnsignedShort();
+                this.constantPool[i] = new ConstantMethodType(descriptorIndex);
+            }
+            else if (currentTag == ConstantTag.DYNAMIC.TAG){
+                short bootstrapMethodAttrIndex = (short)fileStream.readUnsignedShort();
+                short ntIndex = (short)fileStream.readUnsignedShort();
+                this.constantPool[i] = new ConstantDynamic(bootstrapMethodAttrIndex, ntIndex);
+            }
+            else if (currentTag == ConstantTag.INVOKEDYNAMIC.TAG){
+                short bootstrapMethodAttrIndex = (short)fileStream.readUnsignedShort();
+                short ntIndex = (short)fileStream.readUnsignedShort();
+                this.constantPool[i] = new ConstantInvokeDynamic(bootstrapMethodAttrIndex, ntIndex);
+            }
+            else if (currentTag == ConstantTag.MODULE.TAG){
+                short nameIndex = (short)fileStream.readUnsignedShort();
+                this.constantPool[i] = new ConstantModule(nameIndex);
+            }
+            else if (currentTag == ConstantTag.PACKAGE.TAG){
+                short nameIndex = (short)fileStream.readUnsignedShort();
+                this.constantPool[i] = new ConstantPackage(nameIndex);
+            }
+            else{
+                System.out.println("Found undocumented tag: " + currentTag);
+            }
         }
     }
 
