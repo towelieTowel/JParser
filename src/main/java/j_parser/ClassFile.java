@@ -42,7 +42,13 @@ public class ClassFile{
     
         /* 
             Populating constantPool
-            The constant_pool table is indexed from 1 to constant_pool_count - 1.
+            The total number of constants in the constantPool is the constantPoolCount - 1.
+            constantPool[0] is an invalid index by design, therefore the constant_pool table is indexed 
+            from 1 to constant_pool_count - 1. This is to maintain consistency between this model and the 
+            Oracle specification.
+            
+            In addition, the long constant type takes up 2 entries in the constantPool, however the second
+            entry is not usable. 
         */
 
         for (int i = 1; i <= this.constantPoolCount - 1; ++i){
