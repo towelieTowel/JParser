@@ -1,10 +1,8 @@
 *.
 *.swp
 *.swo
-*.class
 !.gitignore
 .token
 j_parser/TODO
-j_parser/*.class
-test/
-out.txt
+tests/
+target/
