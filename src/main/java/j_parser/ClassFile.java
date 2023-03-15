@@ -16,6 +16,7 @@ public class ClassFile{
     private final short minorVersion;
     private final short majorVersion;
     private final ConstantPool cPool;
+    private final short constantCount;
 /*
     private final short accessFlags;
     private final short thisClass;
@@ -37,30 +38,19 @@ public class ClassFile{
         this.minorVersion = (short)fileStream.readUnsignedShort();
         this.majorVersion = (short)fileStream.readUnsignedShort();
         this.cPool = new ConstantPool(fileStream); 
+        this.constantCount = this.cPool.getConstantCount();
    }
 
     public int getMagicNumber(){return this.magicNumber;}
+    
     public short getMinorVersion(){return this.minorVersion;}
+    
     public short getMajorVersion(){return this.majorVersion;}
-    public short getConstantPoolCount(){return this.cPool.getConstantPoolCount();}
-
-/*    public void printConstantCommonNames(){
-        int counter = 0;
-        for (Constant c : this.constantPool){
-            if (c != null){
-                ++counter;
-                System.out.println(c.getCommonName());
-            }
-        } 
-        System.out.println(counter);
-    }*/
+    
+    public short getConstantCount(){return this.constantCount;}
     
     public ArrayList<String> getStrings(){
         return this.cPool.getStrings();
-    }
-
-    public ArrayList<Integer> getIntegers(){
-        return this.cPool.getIntegers();
     }
 
     public static void main(String[] args) throws IOException{
@@ -73,21 +63,12 @@ public class ClassFile{
         System.out.println("Magic Number:" + Integer.toHexString(myClassFile.getMagicNumber())); 
         System.out.println("Minor Version:" + myClassFile.getMinorVersion());
         System.out.println("Major Version:" + myClassFile.getMajorVersion());
-        System.out.println("Constant Pool Count:" + myClassFile.getConstantPoolCount());
+        System.out.println("Number of Constants:" + myClassFile.getConstantCount());
         System.out.println("Strings:");
-//        myClassFile.printConstantCommonNames();
 
         ArrayList<String> strings = myClassFile.getStrings();
         for (String s : strings){
             System.out.println(s);
         }
-
-        System.out.println("Integers:");
-        
-        ArrayList<Integer> integers = myClassFile.getIntegers();
-        for (Integer i : integers){
-            System.out.println(i);
-        }
     } 
-      
 }

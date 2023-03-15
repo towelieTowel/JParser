@@ -115,7 +115,7 @@ public class ConstantPool{
         } 
     }
     
-    public short getConstantPoolCount(){return this.constantPoolCount;}
+    public short getConstantCount(){return (short)(this.constantPoolCount - 1);}
     
     public ArrayList<String> getStrings(){
         ArrayList<String> strings = new ArrayList<>();
@@ -130,18 +130,4 @@ public class ConstantPool{
         }
         return strings;
     }
-
-    public ArrayList<Integer> getIntegers(){
-        ArrayList<Integer> integers = new ArrayList<>();
-        for (Constant c : this.cPool){
-            if (c != null){
-                if (c.getTag() == ConstantTag.INTEGER.TAG){
-                    ConstantInteger intObj = (ConstantInteger)c;
-                    integers.add(intObj.getValue());
-                }
-            }
-        }
-        return integers;
-    }
-
 }
