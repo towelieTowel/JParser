@@ -1,4 +1,4 @@
-package j_parser.enums;
+package j_parser.utils;
 
 public enum ConstantTag{
 /*Enumeration to map all constant pool tags to the type of constant*/

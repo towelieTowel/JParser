@@ -1,12 +1,12 @@
 package j_parser;
 
-import java.lang.Integer;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.DataInputStream;
-
+import java.lang.Integer;
+import java.util.ArrayList;
 import j_parser.utils.ConstantTag;
 import j_parser.types.constants.*;
 import j_parser.interfaces.Constant;
@@ -42,9 +42,9 @@ public class ClassFile{
     public int getMagicNumber(){return this.magicNumber;}
     public short getMinorVersion(){return this.minorVersion;}
     public short getMajorVersion(){return this.majorVersion;}
-    public short getConstantPoolCount(){return this.constantPoolCount;}
+    public short getConstantPoolCount(){return this.cPool.getConstantPoolCount();}
 
-    public void printConstantCommonNames(){
+/*    public void printConstantCommonNames(){
         int counter = 0;
         for (Constant c : this.constantPool){
             if (c != null){
@@ -53,18 +53,14 @@ public class ClassFile{
             }
         } 
         System.out.println(counter);
+    }*/
+    
+    public ArrayList<String> getStrings(){
+        return this.cPool.getStrings();
     }
 
-    public void printUTFStrings(){
-        for (Constant c : this.constantPool){
-            if (c != null){
-                if (c.getCommonName() == "UTF"){
-                    ConstantUTF utfObj = (ConstantUTF)c;
-                    String utfString = new String(utfObj.getBytes());
-                    System.out.println(utfString);
-                }
-            }
-        }
+    public ArrayList<Integer> getIntegers(){
+        return this.cPool.getIntegers();
     }
 
     public static void main(String[] args) throws IOException{
@@ -78,9 +74,20 @@ public class ClassFile{
         System.out.println("Minor Version:" + myClassFile.getMinorVersion());
         System.out.println("Major Version:" + myClassFile.getMajorVersion());
         System.out.println("Constant Pool Count:" + myClassFile.getConstantPoolCount());
+        System.out.println("Strings:");
+//        myClassFile.printConstantCommonNames();
 
-        myClassFile.printConstantCommonNames();
-        myClassFile.printUTFStrings();
+        ArrayList<String> strings = myClassFile.getStrings();
+        for (String s : strings){
+            System.out.println(s);
+        }
+
+        System.out.println("Integers:");
+        
+        ArrayList<Integer> integers = myClassFile.getIntegers();
+        for (Integer i : integers){
+            System.out.println(i);
+        }
     } 
       
 }

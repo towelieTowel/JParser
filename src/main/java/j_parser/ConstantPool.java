@@ -1,17 +1,22 @@
 package j_parser;
 
 import java.io.DataInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.lang.Integer;
 import j_parser.utils.ConstantTag;
+import j_parser.interfaces.Constant;
+import j_parser.types.constants.*;
 
 public class ConstantPool{
     private final short constantPoolCount;
     private final Constant[] cPool;
     
-    ConstantPool(DataInputStream fileStream){
+    ConstantPool(DataInputStream fileStream) throws IOException{
         this.constantPoolCount = (short)fileStream.readUnsignedShort();
-        this.cPool = new Constant[cPoolCount];
+        this.cPool = new Constant[this.constantPoolCount - 1];
         
-        for (int i = 1; i <= this.cPoolCount - 1; ++i){
+        for (int i = 0; i <= this.cPool.length - 1; ++i){
             int currentTag = fileStream.readUnsignedByte();
             
             if (currentTag == ConstantTag.UTF.TAG){
@@ -30,12 +35,23 @@ public class ConstantPool{
                 this.cPool[i] = new ConstantFloat(value);
             }
             else if (currentTag == ConstantTag.LONG.TAG){
+                /*
+                    Long constants occupy 2 entries in the constant pool
+                    The second entry is a valid entry but is not used
+                */
                 long value = fileStream.readLong();
                 this.cPool[i] = new ConstantLong(value);
+                ++i;
             }
             else if (currentTag == ConstantTag.DOUBLE.TAG){
+                /*
+                    Double constants occupy 2 entries in the constant pool
+                    The second entry is a valid entry but is not used
+                */
+
                 double value = fileStream.readDouble();
                 this.cPool[i] = new ConstantDouble(value);
+                ++i;
             }
             else if (currentTag == ConstantTag.CLASS.TAG){
                 short nameIndex = (short)fileStream.readUnsignedShort();
@@ -93,8 +109,39 @@ public class ConstantPool{
                 this.cPool[i] = new ConstantPackage(nameIndex);
             }
             else{
+                //Need to handle this better
                 System.out.println("Found undocumented tag: " + currentTag);
             }
         } 
     }
+    
+    public short getConstantPoolCount(){return this.constantPoolCount;}
+    
+    public ArrayList<String> getStrings(){
+        ArrayList<String> strings = new ArrayList<>();
+        for (Constant c : this.cPool){
+            if (c != null){
+                if (c.getTag() == ConstantTag.UTF.TAG){
+                    ConstantUTF utfObj = (ConstantUTF)c;
+                    String utfString = new String(utfObj.getBytes());
+                    strings.add(utfString);
+                }
+            }
+        }
+        return strings;
+    }
+
+    public ArrayList<Integer> getIntegers(){
+        ArrayList<Integer> integers = new ArrayList<>();
+        for (Constant c : this.cPool){
+            if (c != null){
+                if (c.getTag() == ConstantTag.INTEGER.TAG){
+                    ConstantInteger intObj = (ConstantInteger)c;
+                    integers.add(intObj.getValue());
+                }
+            }
+        }
+        return integers;
+    }
+
 }

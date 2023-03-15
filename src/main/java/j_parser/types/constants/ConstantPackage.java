@@ -1,6 +1,6 @@
 package j_parser.types.constants;
 
-import j_parser.utils.ConstantTag
+import j_parser.utils.ConstantTag;
 import j_parser.interfaces.Constant;
 
 final public class ConstantPackage implements Constant{

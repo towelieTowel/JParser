@@ -1,7 +1,7 @@
 package j_parser.types.constants;
 
 import j_parser.interfaces.Constant;
-import j_parser.utils.ConstantTag
+import j_parser.utils.ConstantTag;
 
 final public class ConstantLong implements Constant{
     private final int TAG = ConstantTag.LONG.TAG;
