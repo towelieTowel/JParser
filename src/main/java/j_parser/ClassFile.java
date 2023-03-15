@@ -7,6 +7,7 @@ import java.io.DataInputStream;
 import java.lang.Integer;
 import java.util.ArrayList;
 import j_parser.utils.ConstantTag;
+import j_parser.utils.enums.AccessFlags;
 import j_parser.types.constants.*;
 import j_parser.interfaces.Constant;
 
@@ -16,20 +17,10 @@ public class ClassFile{
     private final short majorVersion;
     private final ConstantPool cPool;
     private final short constantCount;
-/*
     private final short accessFlags;
     private final short thisClass;
-
     private final short superClass;
-    private final short interfacesCount;
-    private short[] interfaces;
-    private short fieldsCount;
-    private HashMap<short, Field> fields;
-    private short methodsCount;
-    private HashMap<short, Method> methods;
-    private short attributesCount;
-    private HashMap<short, Attribute> attributes;
-*/
+    
     public ClassFile(File classFile) throws IOException{
         DataInputStream fileStream = new DataInputStream(new FileInputStream(classFile));
 
@@ -38,6 +29,9 @@ public class ClassFile{
         this.majorVersion = (short)fileStream.readUnsignedShort();
         this.cPool = new ConstantPool(fileStream); 
         this.constantCount = this.cPool.getConstantCount();
+        this.accessFlags = (short)fileStream.readUnsignedShort();
+        this.thisClass = (short)fileStream.readUnsignedShort();
+        this.superClass = (short)fileStream.readUnsignedShort();
    }
 
     public int getMagicNumber(){return this.magicNumber;}
@@ -45,8 +39,26 @@ public class ClassFile{
     public short getMinorVersion(){return this.minorVersion;}
     
     public short getMajorVersion(){return this.majorVersion;}
-    
+   
+    public ConstantPool getConstantPool(){return this.cPool;}
+ 
     public short getConstantCount(){return this.constantCount;}
+    public short getRawAccessFlag(){return this.accessFlags;}
+    
+    public ArrayList<String> getAccessFlags(){
+        ArrayList<String> flagsList = new ArrayList<>();
+        for(AccessFlags f : AccessFlags.values()){
+            if ((this.accessFlags & f.FLAG) == f.FLAG){
+                flagsList.add(f.name());
+            }
+        }
+        
+        return flagsList;
+    }
+
+    public short getThisClass(){return this.thisClass;}
+
+//    public short getSuperClass(){return this.superClass;}
     
     public ArrayList<String> getStrings(){
         return this.cPool.getStrings();

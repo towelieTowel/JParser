@@ -22,5 +22,12 @@ public class JParser{
         for (String s : strings){
             System.out.println(s);
         }
+        
+        ArrayList<String> accessFlags = new ArrayList<>();
+        accessFlags = myClassFile.getAccessFlags();
+        System.out.println("Access and Modifier flags:");
+        for (String f : accessFlags){
+            System.out.println(f);
+        }
     } 
 }
