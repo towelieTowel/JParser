@@ -1,7 +1,7 @@
 package j_parser.types.constants;
 
 import j_parser.interfaces.Constant;
-import j_parser.enums.ConstantTag;
+import j_parser.utils.ConstantTag
 
 public final class ConstantInterfaceMethodRef implements Constant{
     private final int TAG = ConstantTag.INTERFACE_METHODREF.TAG;

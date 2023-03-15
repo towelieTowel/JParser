@@ -7,7 +7,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.DataInputStream;
 
-import j_parser.enums.ConstantTag;
+import j_parser.utils.ConstantTag;
 import j_parser.types.constants.*;
 import j_parser.interfaces.Constant;
 
@@ -37,17 +37,6 @@ public class ClassFile{
         this.minorVersion = (short)fileStream.readUnsignedShort();
         this.majorVersion = (short)fileStream.readUnsignedShort();
         this.cPool = new ConstantPool(fileStream); 
-        /* 
-            Populating constantPool
-            The total number of constants in the constantPool is the constantPoolCount - 1.
-            constantPool[0] is an invalid index by design, therefore the constant_pool table is indexed 
-            from 1 to constant_pool_count - 1. This is to maintain consistency between this model and the 
-            Oracle specification.
-            
-            In addition, the long constant type takes up 2 entries in the constantPool, however the second
-            entry is not usable. 
-        */
-
    }
 
     public int getMagicNumber(){return this.magicNumber;}

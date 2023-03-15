@@ -1,5 +1,8 @@
 package j_parser;
 
+import java.io.DataInputStream;
+import j_parser.utils.ConstantTag;
+
 public class ConstantPool{
     private final short constantPoolCount;
     private final Constant[] cPool;
@@ -92,8 +95,6 @@ public class ConstantPool{
             else{
                 System.out.println("Found undocumented tag: " + currentTag);
             }
-        }
- 
+        } 
     }
-
 }
