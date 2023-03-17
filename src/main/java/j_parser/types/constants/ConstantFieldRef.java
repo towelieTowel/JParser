@@ -5,20 +5,20 @@ import j_parser.utils.ConstantTag;
 
 public final class ConstantFieldRef implements Constant{
     private final int TAG = ConstantTag.FIELDREF.TAG;
-    private final short CLASS_INDEX;
-    private final short NT_INDEX;
+    private final int CLASS_INDEX;
+    private final int NT_INDEX;
     private final String COMMON_NAME = ConstantTag.FIELDREF.name();
 
-    public ConstantFieldRef(short classIndex, short ntIndex){
+    public ConstantFieldRef(int classIndex, int ntIndex){
         this.CLASS_INDEX = classIndex;
         this.NT_INDEX = ntIndex;
     }
 
-    public short getClassIndex(){
+    public int getClassIndex(){
         return this.CLASS_INDEX;
     }
 
-    public short getNTIndex(){
+    public int getNTIndex(){
         return this.NT_INDEX;
     }
 

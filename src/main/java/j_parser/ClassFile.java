@@ -12,41 +12,41 @@ import j_parser.interfaces.Constant;
 
 public class ClassFile{
     private final int magicNumber;
-    private final short minorVersion;
-    private final short majorVersion;
+    private final int minorVersion;
+    private final int majorVersion;
     private final ConstantPool cPool;
-    private final short constantCount;
+    private final int constantCount;
 /*
-    private final short accessFlags;
-    private final short thisClass;
+    private final int accessFlags;
+    private final int thisClass;
 
-    private final short superClass;
-    private final short interfacesCount;
-    private short[] interfaces;
-    private short fieldsCount;
-    private HashMap<short, Field> fields;
-    private short methodsCount;
-    private HashMap<short, Method> methods;
-    private short attributesCount;
-    private HashMap<short, Attribute> attributes;
+    private final int superClass;
+    private final int interfacesCount;
+    private int[] interfaces;
+    private int fieldsCount;
+    private HashMap<int, Field> fields;
+    private int methodsCount;
+    private HashMap<int, Method> methods;
+    private int attributesCount;
+    private HashMap<int, Attribute> attributes;
 */
     public ClassFile(File classFile) throws IOException{
         DataInputStream fileStream = new DataInputStream(new FileInputStream(classFile));
 
         this.magicNumber = fileStream.readInt();
-        this.minorVersion = (short)fileStream.readUnsignedShort();
-        this.majorVersion = (short)fileStream.readUnsignedShort();
+        this.minorVersion = fileStream.readUnsignedShort();
+        this.majorVersion = fileStream.readUnsignedShort();
         this.cPool = new ConstantPool(fileStream); 
         this.constantCount = this.cPool.getConstantCount();
    }
 
     public int getMagicNumber(){return this.magicNumber;}
     
-    public short getMinorVersion(){return this.minorVersion;}
+    public int getMinorVersion(){return this.minorVersion;}
     
-    public short getMajorVersion(){return this.majorVersion;}
+    public int getMajorVersion(){return this.majorVersion;}
     
-    public short getConstantCount(){return this.constantCount;}
+    public int getConstantCount(){return this.constantCount;}
     
     public ArrayList<String> getStrings(){
         return this.cPool.getStrings();

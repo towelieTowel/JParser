@@ -5,20 +5,20 @@ import j_parser.interfaces.Constant;
 
 final public class ConstantNameAndType implements Constant{
     private final int TAG = ConstantTag.NAMEANDTYPE.TAG;
-    private final short NAME_INDEX;
-    private final short DESCRIPTOR_INDEX;
+    private final int NAME_INDEX;
+    private final int DESCRIPTOR_INDEX;
     private final String COMMON_NAME = ConstantTag.NAMEANDTYPE.name();
 
-    public ConstantNameAndType(short nameIndex, short descriptorIndex){
+    public ConstantNameAndType(int nameIndex, int descriptorIndex){
         this.NAME_INDEX = nameIndex;
         this.DESCRIPTOR_INDEX = descriptorIndex;
     }
 
-    public short getNameIndex(){
+    public int getNameIndex(){
         return this.NAME_INDEX;
     }
 
-    public short getDescriptorIndex(){
+    public int getDescriptorIndex(){
         return this.DESCRIPTOR_INDEX;
     }
 
