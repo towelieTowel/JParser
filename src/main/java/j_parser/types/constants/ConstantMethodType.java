@@ -5,14 +5,14 @@ import j_parser.interfaces.Constant;
 
 final public class ConstantMethodType implements Constant{
     private final int TAG = ConstantTag.METHODTYPE.TAG;
-    private final short DESCRIPTOR_INDEX; 
+    private final int DESCRIPTOR_INDEX; 
     private final String COMMON_NAME = ConstantTag.METHODTYPE.name();
 
-    public ConstantMethodType(short descriptorIndex){
+    public ConstantMethodType(int descriptorIndex){
         this.DESCRIPTOR_INDEX = descriptorIndex;
     }
     
-    public short getDescriptorIndex(){
+    public int getDescriptorIndex(){
         return this.DESCRIPTOR_INDEX;
     } 
 

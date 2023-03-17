@@ -5,14 +5,14 @@ import j_parser.interfaces.Constant;
 
 public final class ConstantString implements Constant{
     private final int TAG = ConstantTag.STRING.TAG;
-    private final short STRING_INDEX;
+    private final int STRING_INDEX;
     private final String COMMON_NAME = ConstantTag.STRING.name();
     
-    public ConstantString(short stringIndex){
+    public ConstantString(int stringIndex){
         this.STRING_INDEX = stringIndex;
     }
 
-    public short getStringIndex(){
+    public int getStringIndex(){
         return this.STRING_INDEX;
     }
 

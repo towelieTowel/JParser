@@ -5,20 +5,20 @@ import j_parser.interfaces.Constant;
 
 final public class ConstantInvokeDynamic implements Constant{
     private final int TAG = ConstantTag.INVOKEDYNAMIC.TAG;
-    private final short BOOTSTRAP_METHOD_ATTR_INDEX;
-    private final short NT_INDEX;
+    private final int BOOTSTRAP_METHOD_ATTR_INDEX;
+    private final int NT_INDEX;
     private final String COMMON_NAME = ConstantTag.INVOKEDYNAMIC.name();
 
-    public ConstantInvokeDynamic(short bootstrapMethodAttrIndex, short ntIndex){
+    public ConstantInvokeDynamic(int bootstrapMethodAttrIndex, int ntIndex){
         this.BOOTSTRAP_METHOD_ATTR_INDEX = bootstrapMethodAttrIndex;
         this.NT_INDEX = ntIndex;
     }
     
-    public short getBootstrapMethodAttrIndex(){
+    public int getBootstrapMethodAttrIndex(){
         return this.BOOTSTRAP_METHOD_ATTR_INDEX;
     } 
 
-    public short getNTIndex(){
+    public int getNTIndex(){
         return this.NT_INDEX;
     }
 

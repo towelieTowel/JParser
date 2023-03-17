@@ -5,20 +5,20 @@ import j_parser.utils.ConstantTag;
 
 public final class ConstantInterfaceMethodRef implements Constant{
     private final int TAG = ConstantTag.INTERFACE_METHODREF.TAG;
-    private final short CLASS_INDEX;
-    private final short NT_INDEX;
+    private final int CLASS_INDEX;
+    private final int NT_INDEX;
     private final String COMMON_NAME = ConstantTag.INTERFACE_METHODREF.name();
 
-    public ConstantInterfaceMethodRef(short classIndex, short NTIndex){
+    public ConstantInterfaceMethodRef(int classIndex, int NTIndex){
         this.CLASS_INDEX = classIndex;
         this.NT_INDEX = NTIndex;
     }
 
-    public short getClassIndex(){
+    public int getClassIndex(){
         return this.CLASS_INDEX;
     }
 
-    public short getNTIndex(){
+    public int getNTIndex(){
         return this.NT_INDEX;
     }
 
