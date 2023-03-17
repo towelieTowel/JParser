@@ -130,4 +130,8 @@ public class ConstantPool{
         }
         return strings;
     }
+    
+    public Constant getObjAtIndex(int index){
+        return cPool[index];
+    }
 }
