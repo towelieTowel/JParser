@@ -30,7 +30,7 @@ public class ClassFile{
         this.cPool = new ConstantPool(fileStream); 
         this.constantCount = this.cPool.getConstantCount();
         this.accessFlags = fileStream.readUnsignedShort();
-        this.thisClass = fileStream.readUnsignedShort();
+        this.thisClass = fileStream.readUnsignedShort() - 1;
         this.superClass = fileStream.readUnsignedShort();
    }
 
@@ -43,20 +43,29 @@ public class ClassFile{
     public ConstantPool getConstantPool(){return this.cPool;}
  
     public int getConstantCount(){return this.constantCount;}
-    public int getRawAccessFlag(){return this.accessFlags;}
     
-    public ArrayList<String> getAccessFlags(){
-        ArrayList<String> flagsList = new ArrayList<>();
+    public int getAccessFlags(){return this.accessFlags;}
+    
+    public ArrayList<String> getAccessModifiers(){
+        ArrayList<String> modifiers = new ArrayList<>();
         for(AccessFlags f : AccessFlags.values()){
             if ((this.accessFlags & f.FLAG) == f.FLAG){
-                flagsList.add(f.name());
+                modifiers.add(f.name());
             }
         }
         
-        return flagsList;
+        return modifiers;
     }
 
- //   public int getThisClass(){return this.thisClass;}
+    public String getThisClassName(){
+       ConstantClass classObj = (ConstantClass)this.cPool.getObjAtIndex(this.thisClass);
+       ConstantUTF utfObj = (ConstantUTF)this.cPool.getObjAtIndex(classObj.getNameIndex());
+
+       String internalName = new String(utfObj.getBytes());
+       return internalName; 
+    }
+
+    public int getThisClassIndex(){ return this.thisClass; }
     
     public ArrayList<String> getStrings(){
         return this.cPool.getStrings();

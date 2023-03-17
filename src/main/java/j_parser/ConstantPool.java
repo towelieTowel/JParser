@@ -55,58 +55,58 @@ public class ConstantPool{
             }
             else if (currentTag == ConstantTag.CLASS.TAG){
                 int nameIndex = fileStream.readUnsignedShort();
-                this.cPool[i] = new ConstantClass(nameIndex);
+                this.cPool[i] = new ConstantClass(nameIndex - 1);
             }
             else if (currentTag == ConstantTag.STRING.TAG){
                 int stringIndex = fileStream.readUnsignedShort();
-                this.cPool[i] = new ConstantString(stringIndex);
+                this.cPool[i] = new ConstantString(stringIndex - 1);
             }
             else if (currentTag == ConstantTag.FIELDREF.TAG){
                 int classIndex = fileStream.readUnsignedShort();
                 int ntIndex = fileStream.readUnsignedShort();
-                this.cPool[i] = new ConstantFieldRef(classIndex, ntIndex);
+                this.cPool[i] = new ConstantFieldRef(classIndex - 1, ntIndex - 1);
             }
             else if (currentTag == ConstantTag.METHODREF.TAG){
                 int classIndex = fileStream.readUnsignedShort();
                 int ntIndex = fileStream.readUnsignedShort();
-                this.cPool[i] = new ConstantMethodRef(classIndex, ntIndex);
+                this.cPool[i] = new ConstantMethodRef(classIndex - 1, ntIndex - 1);
             }
             else if (currentTag == ConstantTag.INTERFACE_METHODREF.TAG){
                 int classIndex = fileStream.readUnsignedShort();
                 int ntIndex = fileStream.readUnsignedShort();
-                this.cPool[i] = new ConstantMethodRef(classIndex, ntIndex); 
+                this.cPool[i] = new ConstantMethodRef(classIndex - 1, ntIndex - 1); 
             }
             else if (currentTag == ConstantTag.NAMEANDTYPE.TAG){
                 int nameIndex = fileStream.readUnsignedShort();
                 int descriptorIndex = fileStream.readUnsignedShort();
-                this.cPool[i] = new ConstantNameAndType(nameIndex, descriptorIndex);
+                this.cPool[i] = new ConstantNameAndType(nameIndex - 1, descriptorIndex - 1);
             }
             else if (currentTag == ConstantTag.METHODHANDLE.TAG){
                 int refKind = fileStream.readUnsignedShort();
                 int index = fileStream.readUnsignedShort();
-                this.cPool[i] = new ConstantMethodHandle(refKind, index);
+                this.cPool[i] = new ConstantMethodHandle(refKind, index - 1);
             }
             else if (currentTag == ConstantTag.METHODTYPE.TAG){
                 int descriptorIndex = fileStream.readUnsignedShort();
-                this.cPool[i] = new ConstantMethodType(descriptorIndex);
+                this.cPool[i] = new ConstantMethodType(descriptorIndex - 1);
             }
             else if (currentTag == ConstantTag.DYNAMIC.TAG){
                 int bootstrapMethodAttrIndex = fileStream.readUnsignedShort();
                 int ntIndex = fileStream.readUnsignedShort();
-                this.cPool[i] = new ConstantDynamic(bootstrapMethodAttrIndex, ntIndex);
+                this.cPool[i] = new ConstantDynamic(bootstrapMethodAttrIndex, ntIndex - 1);
             }
             else if (currentTag == ConstantTag.INVOKEDYNAMIC.TAG){
                 int bootstrapMethodAttrIndex = fileStream.readUnsignedShort();
                 int ntIndex = fileStream.readUnsignedShort();
-                this.cPool[i] = new ConstantInvokeDynamic(bootstrapMethodAttrIndex, ntIndex);
+                this.cPool[i] = new ConstantInvokeDynamic(bootstrapMethodAttrIndex, ntIndex - 1);
             }
             else if (currentTag == ConstantTag.MODULE.TAG){
                 int nameIndex = fileStream.readUnsignedShort();
-                this.cPool[i] = new ConstantModule(nameIndex);
+                this.cPool[i] = new ConstantModule(nameIndex - 1);
             }
             else if (currentTag == ConstantTag.PACKAGE.TAG){
                 int nameIndex = fileStream.readUnsignedShort();
-                this.cPool[i] = new ConstantPackage(nameIndex);
+                this.cPool[i] = new ConstantPackage(nameIndex - 1);
             }
             else{
                 //Need to handle this better

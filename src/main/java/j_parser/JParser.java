@@ -24,10 +24,16 @@ public class JParser{
         }
         
         ArrayList<String> accessFlags = new ArrayList<>();
-        accessFlags = myClassFile.getAccessFlags();
+        accessFlags = myClassFile.getAccessModifiers();
+        System.out.println("");
         System.out.println("Access and Modifier flags:");
         for (String f : accessFlags){
             System.out.println(f);
         }
+       
+        System.out.println("");
+        System.out.println("Class internal name:");
+        String className = myClassFile.getThisClassName();
+        System.out.println(className);
     } 
 }
