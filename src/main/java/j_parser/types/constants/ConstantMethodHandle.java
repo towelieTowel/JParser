@@ -5,20 +5,20 @@ import j_parser.interfaces.Constant;
 
 final public class ConstantMethodHandle implements Constant{
     private final int TAG = ConstantTag.METHODHANDLE.TAG;
-    private final short REF_KIND;
-    private final short INDEX; 
+    private final int REF_KIND;
+    private final int INDEX; 
     private final String COMMON_NAME = ConstantTag.METHODHANDLE.name();
 
-    public ConstantMethodHandle(short refKind, short index){
+    public ConstantMethodHandle(int refKind, int index){
         this.REF_KIND = refKind;
         this.INDEX = index;
     }
     
-    public short getRefKind(){
+    public int getRefKind(){
         return this.REF_KIND;
     } 
 
-    public short getIndex(){
+    public int getIndex(){
         return this.INDEX;
     }
 
