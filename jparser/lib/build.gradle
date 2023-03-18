@@ -24,9 +24,16 @@ dependencies {
 tasks.named('test') {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
+
     testLogging {
         events "passed", "skipped", "failed"
     }
+
+}
+
+task buildDocs(type: Javadoc) {
+    source = sourceSets.main.allJava
+    destinationDir = file('../docs')
 }
 
 version = '0.1.0'
