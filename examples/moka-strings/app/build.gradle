@@ -21,15 +21,23 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.1'
 
     // This dependency is used by the application.
-    implementation 'com.google.guava:guava:31.1-jre'
+  implementation 'com.google.guava:guava:31.1-jre'
+  implementation fileTree('src/main/resources/libs/')
 }
 
-application {
-    // Define the main class for the application.
-    mainClass = 'moka.App'
-}
+task runApp(type: JavaExec) {
+   classpath = sourceSets.main.runtimeClasspath
+
+   mainClass = 'moka.StringParser'
+
+   // arguments to pass to the application
+   args '../resources/TornadoWithFinal.class'
+ }
 
 tasks.named('test') {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
 }
