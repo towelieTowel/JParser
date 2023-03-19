@@ -9,6 +9,7 @@
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     id 'application'
+    id 'java'
 }
 
 repositories {
@@ -19,11 +20,23 @@ repositories {
 dependencies {
     // Use JUnit Jupiter for testing.
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.1'
-
-    // This dependency is used by the application.
-  implementation 'com.google.guava:guava:31.1-jre'
-  implementation fileTree('src/main/resources/libs/')
+    
+    //Dependencies are kept in src/main/resources/libs
+    implementation fileTree('src/main/resources/libs/')
 }
+
+application {
+    // Extension needed to build app correctly
+    mainClass = 'moka.StringParser'
+}
+
+jar {
+    manifest {
+        attributes('Main-Class': 'moka.StringParser')
+    }
+}
+
+/* --------------------Custom tasks----------------------*/
 
 task runApp(type: JavaExec) {
    classpath = sourceSets.main.runtimeClasspath
@@ -40,4 +53,42 @@ tasks.named('test') {
     testLogging {
         events "passed", "skipped", "failed"
     }
+}
+
+/*
+*  task cleanup is meant to be run after every build because,
+*  library jar builds and other automated output is not necessary 
+*  for this application.
+*  
+*  This task can be safely deleted but will result in unusable
+*  jar files in build/libs due to this build.gradle script's 
+*  lack of configuration for such a task.
+*/
+task cleanup(type: Delete) {
+    def libs = file('build/libs')
+    def generated = file('build/generated') 
+    def tmp = file('build/tmp')
+    def resources = file('build/resources')
+    def scripts = file('build/scripts')
+    def testResults = file('build/test-results')
+
+    doFirst {
+        println 'Deleting build/libs/'
+        println 'Deleting build/generated/'
+        println 'Deleting build/tmp/'
+        println 'Deleting build/resources/'
+        println 'Deleting build/scripts/'
+        println 'Deleting build/test-results'
+    }
+
+    delete libs
+    delete generated
+    delete tmp 
+    delete resources 
+    delete scripts
+
+    /* We can delete test-results dir because useful report data
+    *  is stored in /build/reports 
+    */ 
+    delete testResults 
 }
