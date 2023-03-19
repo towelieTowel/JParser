@@ -11,6 +11,9 @@ plugins {
     id 'java-library'
 }
 
+// Build version
+version = '0.1.0'
+
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
@@ -20,6 +23,8 @@ dependencies {
     // Use JUnit Jupiter for testing.
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.1'
 }
+
+/* ----------------------Custom Tasks-------------------------*/
 
 tasks.named('test') {
     // Use JUnit Platform for unit tests.
@@ -36,4 +41,27 @@ task buildDocs(type: Javadoc) {
     destinationDir = file('../docs')
 }
 
-version = '0.1.0'
+/*
+*  task cleanup is meant to be run after every build because,
+*  library jar builds and other automated output is not necessary 
+*  for the build.
+*  
+*  This task can be safely deleted but will result in a larger build
+*/
+task cleanup(type: Delete) {
+    def generated = file('build/generated')
+    def tmp = file('build/tmp')
+    def testResults = file('build/test-results')
+
+    doLast {
+        println 'Deleting build/generated'
+        println 'Deleting build/tmp'
+        println 'Deleting build/test-results'
+    }
+
+    delete generated
+    delete tmp
+    delete testResults
+}
+
+
