@@ -15,8 +15,8 @@ public class ClassFile{
     private final int magicNumber;
     private final int minorVersion;
     private final int majorVersion;
+    private final int constantPoolCount;
     private final ConstantPool cPool;
-    private final int constantCount;
     private final int accessFlags;
     private final int thisClass;
     private final int superClass;
@@ -27,10 +27,11 @@ public class ClassFile{
         this.magicNumber = fileStream.readInt();
         this.minorVersion = fileStream.readUnsignedShort();
         this.majorVersion = fileStream.readUnsignedShort();
-        this.cPool = new ConstantPool(fileStream); 
-        this.constantCount = this.cPool.getConstantCount();
+        this.constantPoolCount = fileStream.readUnsignedShort();
+        this.cPool = new ConstantPool();
+        this.cPool.create(fileStream, this.constantPoolCount);
         this.accessFlags = fileStream.readUnsignedShort();
-        this.thisClass = fileStream.readUnsignedShort() - 1;
+        this.thisClass = fileStream.readUnsignedShort();
         this.superClass = fileStream.readUnsignedShort();
    }
 
@@ -42,7 +43,7 @@ public class ClassFile{
    
     public ConstantPool getConstantPool(){return this.cPool;}
  
-    public int getConstantCount(){return this.constantCount;}
+    public int getConstantCount(){return this.constantPoolCount - 1;}
     
     public int getAccessFlags(){return this.accessFlags;}
     
