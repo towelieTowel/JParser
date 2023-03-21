@@ -14,12 +14,21 @@ import org.junit.jupiter.api.Nested;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ConstantPoolTest {
+    static class TypeStates{
+        static String testCase;
+    }
+
+    @BeforeAll
+    static void setUpStates(){
+        TypeStates.testCase = "TestUTF";
+    }
+
     @Nested
     class objInitialization {
         @Nested
         class whenUTF{
              static Constant[] rawCPool; 
-             static String testCase = "TestUTF";
+    //         static String testCase = "TestUTF";
             
             @BeforeAll
             static void setUp() throws IOException {
@@ -34,7 +43,7 @@ class ConstantPoolTest {
                 outDataStream.writeByte(ConstantTag.UTF.TAG);
                 
                 // Write mock UTF data
-                outDataStream.writeUTF(testCase);
+                outDataStream.writeUTF(TypeStates.testCase);
 
                 // Convert to byte[]
                 byte[] byteArray = outByteStream.toByteArray();
@@ -61,10 +70,10 @@ class ConstantPoolTest {
 
                 assertAll("Check properties", 
                     // Check LENGTH
-                    () -> assertEquals(testCase.getBytes().length, utfObj.getLen(), "Recorded incorrect length"),
+                    () -> assertEquals(ConstantPoolTest.TypeStates.testCase.getBytes().length, utfObj.getLen(), "Recorded incorrect length"),
 
                     // Check DATA
-                    () -> assertArrayEquals(testCase.getBytes(), utfObj.getBytes(), "Stored incorrect bytes")
+                    () -> assertArrayEquals(ConstantPoolTest.TypeStates.testCase.getBytes(), utfObj.getBytes(), "Stored incorrect bytes")
                 );
             }
         }
@@ -933,5 +942,46 @@ class ConstantPoolTest {
                 );
             }
         }
+/*
+        @Nested
+        class withMultipleTypes{
+            static Constant[] rawCPool;
+
+            @BeforeAll
+            static void setUp() throws IOException{ 
+                // Create a ByteArrayOutputStream
+                ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
+
+                // Wrap ByteArrayOutputStream instance in a DataOutputStream instance
+                DataOutputStream outDataStream = new DataOutputStream(outByteStream);
+              //Begin looping through types here
+                
+                for (ConstantTag t : ConstantTag.values()){
+                    if (t.name() == "UTF"){
+                        // Write tag for UTF
+                        outDataStream.writeByte(ConstantTag.UTF.TAG);
+                        
+                        // Write mock UTF data
+                        outDataStream.writeUTF(testCase);
+                    }
+                }
+                // All types have been written at this point 
+                // Convert to byte[]
+                byte[] byteArray = outByteStream.toByteArray();
+
+                // Create new input stream
+                ByteArrayInputStream inByteStream = new ByteArrayInputStream(byteArray);
+                
+                // Create mockStream
+                DataInputStream mockStream = new DataInputStream(inByteStream);
+                
+                // Populate a constant pool
+                ConstantPool cPool = new ConstantPool();
+                cPool.create(mockStream, 2);
+                whenPackage.rawCPool = cPool.getRawCPool();
+                
+            }
+        }
+        */
     }
 }
