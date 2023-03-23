@@ -7,123 +7,111 @@ import java.lang.Integer;
 import j_parser.utils.ConstantTag;
 import j_parser.interfaces.Constant;
 import j_parser.types.constants.*;
+import j_parser.utils.Parse;
 
 public class ConstantPool{
     private  Constant[] cPool;
     
-    int create(DataInputStream fileStream, int constantPoolCount) throws IOException{
+    int create(DataInputStream in, int constantPoolCount) throws IOException{
         int totalBuilt = 0;
 
         this.cPool = new Constant[constantPoolCount - 1];
         
         for (int i = 0; i <= this.cPool.length - 1; ++i){
-            int currentTag = fileStream.readUnsignedByte();
+            int currentTag = in.readUnsignedByte();
             
             if (currentTag == ConstantTag.UTF.TAG){
-                int len = fileStream.readUnsignedShort();
-                byte[] data = new byte[len];
-                fileStream.read(data, 0, len);
-
-                this.cPool[i] = new ConstantUTF(len, data);
+                this.cPool[i] = Parse.buildConstantUTF(in);
+                
                 ++totalBuilt;
-
             } 
             else if (currentTag == ConstantTag.INTEGER.TAG){
-                int value = fileStream.readInt();
-                this.cPool[i] = new ConstantInteger(value); 
+                this.cPool[i] = Parse.buildConstantInteger(in); 
                 ++totalBuilt;
             }
             else if (currentTag == ConstantTag.FLOAT.TAG){
-                float value = fileStream.readFloat();
-                this.cPool[i] = new ConstantFloat(value);
+                this.cPool[i] = Parse.buildConstantFloat(in);
+
                 ++totalBuilt;
             }
             else if (currentTag == ConstantTag.LONG.TAG){
+                this.cPool[i] = Parse.buildConstantLong(in);
+
                 /*
                     Long constants occupy 2 entries in the constant pool
                     The second entry is a valid entry but is not used
                 */
-                long value = fileStream.readLong();
-                this.cPool[i] = new ConstantLong(value);
                 ++totalBuilt;
                 ++i;
             }
             else if (currentTag == ConstantTag.DOUBLE.TAG){
+                this.cPool[i] = Parse.buildConstantDouble(in);
+                
                 /*
                     Double constants occupy 2 entries in the constant pool
                     The second entry is a valid entry but is not used
                 */
-
-                double value = fileStream.readDouble();
-                this.cPool[i] = new ConstantDouble(value);
                 ++totalBuilt;
                 ++i;
             }
             else if (currentTag == ConstantTag.CLASS.TAG){
-                int nameIndex = fileStream.readUnsignedShort();
-                this.cPool[i] = new ConstantClass(nameIndex);
+                this.cPool[i] = Parse.buildConstantClass(in);
+
                 ++totalBuilt;
             }
             else if (currentTag == ConstantTag.STRING.TAG){
-                int stringIndex = fileStream.readUnsignedShort();
-                this.cPool[i] = new ConstantString(stringIndex);
+                this.cPool[i] = Parse.buildConstantString(in);
+
                 ++totalBuilt;
             }
             else if (currentTag == ConstantTag.FIELDREF.TAG){
-                int classIndex = fileStream.readUnsignedShort();
-                int ntIndex = fileStream.readUnsignedShort();
-                this.cPool[i] = new ConstantFieldRef(classIndex, ntIndex);
+                this.cPool[i] = Parse.buildConstantFieldRef(in);
+
                 ++totalBuilt;
             }
             else if (currentTag == ConstantTag.METHODREF.TAG){
-                int classIndex = fileStream.readUnsignedShort();
-                int ntIndex = fileStream.readUnsignedShort();
-                this.cPool[i] = new ConstantMethodRef(classIndex, ntIndex);
+                this.cPool[i] = Parse.buildConstantMethodRef(in);
+
                 ++totalBuilt;
             }
             else if (currentTag == ConstantTag.INTERFACE_METHODREF.TAG){
-                int classIndex = fileStream.readUnsignedShort();
-                int ntIndex = fileStream.readUnsignedShort();
-                this.cPool[i] = new ConstantInterfaceMethodRef(classIndex, ntIndex); 
+                this.cPool[i] = Parse.buildConstantInterfaceMethodRef(in);
+
                 ++totalBuilt;
             }
             else if (currentTag == ConstantTag.NAMEANDTYPE.TAG){
-                int nameIndex = fileStream.readUnsignedShort();
-                int descriptorIndex = fileStream.readUnsignedShort();
-                this.cPool[i] = new ConstantNameAndType(nameIndex, descriptorIndex);
+                this.cPool[i] = Parse.buildConstantNameAndType(in);
+
                 ++totalBuilt;
             }
             else if (currentTag == ConstantTag.METHODHANDLE.TAG){
-                int refKind = fileStream.readUnsignedShort();
-                int index = fileStream.readUnsignedShort();
-                this.cPool[i] = new ConstantMethodHandle(refKind, index);
+                this.cPool[i] = Parse.buildConstantMethodHandle(in);
+
                 ++totalBuilt;
             }
             else if (currentTag == ConstantTag.METHODTYPE.TAG){
-                int descriptorIndex = fileStream.readUnsignedShort();
-                this.cPool[i] = new ConstantMethodType(descriptorIndex);
+                this.cPool[i] = Parse.buildConstantMethodType(in);
+
                 ++totalBuilt;
             }
             else if (currentTag == ConstantTag.DYNAMIC.TAG){
-                int bootstrapMethodAttrIndex = fileStream.readUnsignedShort();
-                int ntIndex = fileStream.readUnsignedShort();
-                this.cPool[i] = new ConstantDynamic(bootstrapMethodAttrIndex, ntIndex);
+                this.cPool[i] = Parse.buildConstantDynamic(in);
+
                 ++totalBuilt;
             }
             else if (currentTag == ConstantTag.INVOKEDYNAMIC.TAG){
-                int bootstrapMethodAttrIndex = fileStream.readUnsignedShort();
-                int ntIndex = fileStream.readUnsignedShort();
-                this.cPool[i] = new ConstantInvokeDynamic(bootstrapMethodAttrIndex, ntIndex);
+                this.cPool[i] = Parse.buildConstantInvokeDynamic(in);
+
                 ++totalBuilt;
             }
             else if (currentTag == ConstantTag.MODULE.TAG){
-                int nameIndex = fileStream.readUnsignedShort();
-                this.cPool[i] = new ConstantModule(nameIndex);
+                this.cPool[i] = Parse.buildConstantModule(in);
+
                 ++totalBuilt;
             }
             else if (currentTag == ConstantTag.PACKAGE.TAG){
-                int nameIndex = fileStream.readUnsignedShort();
-                this.cPool[i] = new ConstantPackage(nameIndex);
+                this.cPool[i] = Parse.buildConstantPackage(in);
+
                 ++totalBuilt;
             }
             else{
