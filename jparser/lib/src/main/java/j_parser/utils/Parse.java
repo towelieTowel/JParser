@@ -55,7 +55,6 @@ public class Parse{
     }
 
     public static ConstantFieldRef buildConstantFieldRef(DataInputStream in) throws IOException {
-
         int classIndex = in.readUnsignedShort();
         int ntIndex = in.readUnsignedShort();
 

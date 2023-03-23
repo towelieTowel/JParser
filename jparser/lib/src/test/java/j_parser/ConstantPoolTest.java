@@ -291,7 +291,7 @@ class ConstantPoolTest {
         @Nested
         class whenClass{
              static Constant[] rawCPool; 
-             static int testCase = 7;
+             static int testCase = 0xffff;
             
             @BeforeAll
             static void setUp() throws IOException {
