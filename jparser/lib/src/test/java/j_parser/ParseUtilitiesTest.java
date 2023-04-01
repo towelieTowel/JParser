@@ -1,7 +1,7 @@
 package j_parser;
 
 import j_parser.types.constants.*;
-import j_parser.utils.Parse;
+import j_parser.utils.CPoolParser;
 
 import java.io.DataOutputStream;
 import java.io.ByteArrayOutputStream;
@@ -21,12 +21,16 @@ class ParseUtilitiesTest {
     @ValueSource(strings = { "Cafe Babe", "1234" })
     @DisplayName("buildConstantUTF initializes an accurate and complete ConstantUTF object")
     void buildUTF(String testCase) throws IOException {
+        
         // Create a ByteArrayOutputStream
         ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
 
         // Wrap ByteArrayOutputStream instance in a DataOutputStream instance
         DataOutputStream outDataStream = new DataOutputStream(outByteStream);
-
+        
+        // Write tag for UTF
+        outDataStream.writeByte( ConstantTag.UTF.TAG );
+        
         // Write mock UTF data
         outDataStream.writeUTF(testCase);
 
@@ -38,15 +42,22 @@ class ParseUtilitiesTest {
         
         // Create mockStream
         DataInputStream mockStream = new DataInputStream(inByteStream);
-       
-        ConstantUTF utf = Parse.buildConstantUTF(mockStream);
+      
+        CPoolParser parser = new CPoolParser( mockStream );
+        
+        Constant constantObj = parser.parse();
 
-        assertAll("Check properties", 
+        assertEquals( ConstantTag.UTF.TAG, constantObj.getTag(), "Initialized incorrect type" );
+
+        ConstantUTF utf = ( ConstantUTF ) constantObj;
+
+        assertAll( "Check properties", 
+            
             // Check LENGTH
-            () -> assertEquals(testCase.getBytes().length, utf.getLen(), "Recorded incorrect length"),
+            () -> assertEquals( testCase.getBytes().length, utf.getLen(), "Recorded incorrect length" ),
 
             // Check DATA
-            () -> assertArrayEquals(testCase.getBytes(), utf.getBytes(), "Stored incorrect bytes")
+            () -> assertArrayEquals( testCase.getBytes(), utf.getBytes(), "Stored incorrect bytes" )
         );
     }
     
@@ -60,6 +71,9 @@ class ParseUtilitiesTest {
         // Wrap ByteArrayOutputStream instance in a DataOutputStream instance
         DataOutputStream outDataStream = new DataOutputStream(outByteStream);
 
+        // Write Integer tag
+        outDataStream.writeByte( ConstantTAG.INTEGER.TAG );
+
         // Write mock Integer data
         outDataStream.writeInt(testCase);
 
@@ -72,7 +86,13 @@ class ParseUtilitiesTest {
         // Create mockStream
         DataInputStream mockStream = new DataInputStream(inByteStream);
        
-        ConstantInteger integer = Parse.buildConstantInteger(mockStream);
+        CPoolParser parser = new CPoolParser( mockStream );
+        
+        Constant constantObj = parser.parse();
+
+        assertEquals( ConstantTag.INTEGER.TAG, constantObj.getTag(), "Initialized incorrect type" );
+
+        ConstantInteger integer = ( ConstantInteger ) constantObj;
 
         assertAll("Check properties", 
             // Check LENGTH
@@ -91,6 +111,9 @@ class ParseUtilitiesTest {
 
         // Wrap ByteArrayOutputStream instance in a DataOutputStream instance
         DataOutputStream outDataStream = new DataOutputStream(outByteStream);
+        
+        // Write float tag
+        outDataStream.writeByte( ConstantTag.FLOAT.TAG );
 
         // Write mock float data
         outDataStream.writeFloat(testCase);
@@ -104,7 +127,13 @@ class ParseUtilitiesTest {
         // Create mockStream
         DataInputStream mockStream = new DataInputStream(inByteStream);
        
-        ConstantFloat floatObj = Parse.buildConstantFloat(mockStream);
+        CPoolParser parser = new CPoolParser( mockStream );
+        
+        Constant constantObj = parser.parse();
+
+        assertEquals( ConstantTag.FLOAT.TAG, constantObj.getTag(), "Initialized incorrect type" );
+
+        ConstantFloat floatObj = ( ConstantFloat ) constantObj;
 
         assertAll("Check properties", 
             // Check LENGTH
@@ -123,6 +152,9 @@ class ParseUtilitiesTest {
 
         // Wrap ByteArrayOutputStream instance in a DataOutputStream instance
         DataOutputStream outDataStream = new DataOutputStream(outByteStream);
+        
+        // Write long tag
+        outDataStream.writeByte( ConstantTag.LONG.TAG );
 
         // Write mock long data
         outDataStream.writeLong(testCase);
@@ -136,7 +168,13 @@ class ParseUtilitiesTest {
         // Create mockStream
         DataInputStream mockStream = new DataInputStream(inByteStream);
        
-        ConstantLong longObj = Parse.buildConstantLong(mockStream);
+        CPoolParser parser = new CPoolParser( mockStream );
+        
+        Constant constantObj = parser.parse();
+
+        assertEquals( ConstantTag.LONG.TAG, constantObj.getTag(), "Initialized incorrect type" );
+
+        ConstantLong longObj = ( ConstantLong ) constantObj;
 
         assertAll("Check properties", 
             // Check LENGTH
@@ -155,6 +193,9 @@ class ParseUtilitiesTest {
 
         // Wrap ByteArrayOutputStream instance in a DataOutputStream instance
         DataOutputStream outDataStream = new DataOutputStream(outByteStream);
+        
+        // Write double tag
+        outDataStream.writeByte( ConstantTag.DOUBLE.TAG );
 
         // Write mock double data
         outDataStream.writeDouble(testCase);
@@ -168,7 +209,13 @@ class ParseUtilitiesTest {
         // Create mockStream
         DataInputStream mockStream = new DataInputStream(inByteStream);
        
-        ConstantDouble doubleObj = Parse.buildConstantDouble(mockStream);
+        CPoolParser parser = new CPoolParser( mockStream );
+        
+        Constant constantObj = parser.parse();
+
+        assertEquals( ConstantTag.DOUBLE.TAG, constantObj.getTag(), "Initialized incorrect type" );
+
+        ConstantDouble doubleObj = ( ConstantDouble ) constantObj;
 
         assertAll("Check properties", 
             // Check LENGTH
@@ -187,6 +234,9 @@ class ParseUtilitiesTest {
 
         // Wrap ByteArrayOutputStream instance in a DataOutputStream instance
         DataOutputStream outDataStream = new DataOutputStream(outByteStream);
+        
+        // Write ConstantClass tag
+        outDataStream.writeByte( ConstantTag.CLASS.TAG );
 
         // Write mock ConstantClass data
         outDataStream.writeShort(testCase);
@@ -200,7 +250,13 @@ class ParseUtilitiesTest {
         // Create mockStream
         DataInputStream mockStream = new DataInputStream(inByteStream);
        
-        ConstantClass classObj = Parse.buildConstantClass(mockStream);
+        CPoolParser parser = new CPoolParser( mockStream );
+        
+        Constant constantObj = parser.parse();
+
+        assertEquals( ConstantTag.CLASS.TAG, constantObj.getTag(), "Initialized incorrect type" );
+
+        ConstantClass classObj = ( ConstantClass ) constantObj;
 
         assertAll("Check properties", 
             // Check LENGTH
@@ -219,6 +275,9 @@ class ParseUtilitiesTest {
 
         // Wrap ByteArrayOutputStream instance in a DataOutputStream instance
         DataOutputStream outDataStream = new DataOutputStream(outByteStream);
+        
+        // Write ConstantString tag
+        outDataStream.writeByte( ConstantTag.STRING.TAG );
 
         // Write mock ConstantString data
         outDataStream.writeShort(testCase);
@@ -232,7 +291,13 @@ class ParseUtilitiesTest {
         // Create mockStream
         DataInputStream mockStream = new DataInputStream(inByteStream);
        
-        ConstantString stringObj = Parse.buildConstantString(mockStream);
+        CPoolParser parser = new CPoolParser( mockStream );
+        
+        Constant constantObj = parser.parse();
+
+        assertEquals( ConstantTag.STRING.TAG, constantObj.getTag(), "Initialized incorrect type" );
+
+        ConstantString stringObj = ( ConstantString ) constantObj;
 
         assertAll("Check properties", 
             // Check LENGTH
@@ -251,8 +316,11 @@ class ParseUtilitiesTest {
 
         // Wrap ByteArrayOutputStream instance in a DataOutputStream instance
         DataOutputStream outDataStream = new DataOutputStream(outByteStream);
+        
+        // Write ConstantMethodRef tag
+        outDataStream.writeByte( ConstantTag.METHODREF.TAG );
 
-        // Write mock ConstantFieldRef data
+        // Write mock ConstantMethodRef data
         outDataStream.writeShort(testCase);
         outDataStream.writeShort(testCase);
 
@@ -265,7 +333,13 @@ class ParseUtilitiesTest {
         // Create mockStream
         DataInputStream mockStream = new DataInputStream(inByteStream);
        
-        ConstantMethodRef methodRef = Parse.buildConstantMethodRef(mockStream);
+        CPoolParser parser = new CPoolParser( mockStream );
+        
+        Constant constantObj = parser.parse();
+
+        assertEquals( ConstantTag.METHODREF.TAG, constantObj.getTag(), "Initialized incorrect type" );
+
+        ConstantMethodRef methodRef = ( ConstantMethodRef ) constantObj;
 
         assertAll("Check properties", 
             // Check class index 
@@ -287,6 +361,9 @@ class ParseUtilitiesTest {
 
         // Wrap ByteArrayOutputStream instance in a DataOutputStream instance
         DataOutputStream outDataStream = new DataOutputStream(outByteStream);
+        
+        // Write ConstantFieldRef tag
+        outDataStream.writeByte( ConstantTag.FIELDREF.TAG );
 
         // Write mock ConstantFieldRef data
         outDataStream.writeShort(testCase);
@@ -301,7 +378,13 @@ class ParseUtilitiesTest {
         // Create mockStream
         DataInputStream mockStream = new DataInputStream(inByteStream);
        
-        ConstantFieldRef fieldRef = Parse.buildConstantFieldRef(mockStream);
+        CPoolParser parser = new CPoolParser( mockStream );
+        
+        Constant constantObj = parser.parse();
+
+        assertEquals( ConstantTag.FIELDREF.TAG, constantObj.getTag(), "Initialized incorrect type" );
+
+        ConstantFieldRef fieldRef = ( ConstantFieldRef ) constantObj;
 
         assertAll("Check properties", 
             // Check class index 
@@ -323,8 +406,11 @@ class ParseUtilitiesTest {
 
         // Wrap ByteArrayOutputStream instance in a DataOutputStream instance
         DataOutputStream outDataStream = new DataOutputStream(outByteStream);
+        
+        // Write ConstantInterfaceMethodRef tag
+        outDataStream.writeByte( ConstantTag.INTERFACE_METHODREF.TAG );
 
-        // Write mock ConstantInterfaceRef data
+        // Write mock ConstantInterfaceMethodRef data
         outDataStream.writeShort(testCase);
         outDataStream.writeShort(testCase);
 
@@ -337,7 +423,13 @@ class ParseUtilitiesTest {
         // Create mockStream
         DataInputStream mockStream = new DataInputStream(inByteStream);
        
-        ConstantInterfaceMethodRef interfaceMethodRef = Parse.buildConstantInterfaceMethodRef(mockStream);
+        CPoolParser parser = new CPoolParser( mockStream );
+        
+        Constant constantObj = parser.parse();
+
+        assertEquals( ConstantTag.INTERFACE_METHODREF.TAG, constantObj.getTag(), "Initialized incorrect type" );
+
+        ConstantInterfaceMethodRef interfaceMethodRef = ( ConstantInterfaceMethodRef ) constantObj;
 
         assertAll("Check properties", 
             // Check class index 
@@ -359,6 +451,9 @@ class ParseUtilitiesTest {
 
         // Wrap ByteArrayOutputStream instance in a DataOutputStream instance
         DataOutputStream outDataStream = new DataOutputStream(outByteStream);
+        
+        // Write ConstantNameAndType tag
+        outDataStream.writeByte( ConstantTag.NAMEANDTYPE.TAG );
 
         // Write mock ConstantNameAndType data
         outDataStream.writeShort(testCase);
@@ -373,7 +468,13 @@ class ParseUtilitiesTest {
         // Create mockStream
         DataInputStream mockStream = new DataInputStream(inByteStream);
        
-        ConstantNameAndType constantNT = Parse.buildConstantNameAndType(mockStream);
+        CPoolParser parser = new CPoolParser( mockStream );
+        
+        Constant constantObj = parser.parse();
+
+        assertEquals( ConstantTag.NAMEANDTYPE.TAG, constantObj.getTag(), "Initialized incorrect type" );
+
+        ConstantNameAndType constantNT = ( ConstantNameAndType ) constantObj;
 
         assertAll("Check properties", 
             // Check name index 
@@ -395,6 +496,9 @@ class ParseUtilitiesTest {
 
         // Wrap ByteArrayOutputStream instance in a DataOutputStream instance
         DataOutputStream outDataStream = new DataOutputStream(outByteStream);
+        
+        // Write ConstantMethodHandle tag
+        outDataStream.writeByte( ConstantTag.METHODHANDLE.TAG );
 
         // Write mock ConstantMethodHandle data
         outDataStream.writeShort(testCase);
@@ -409,7 +513,13 @@ class ParseUtilitiesTest {
         // Create mockStream
         DataInputStream mockStream = new DataInputStream(inByteStream);
        
-        ConstantMethodHandle methodHandle = Parse.buildConstantMethodHandle(mockStream);
+        CPoolParser parser = new CPoolParser( mockStream );
+        
+        Constant constantObj = parser.parse();
+
+        assertEquals( ConstantTag.METHODHANDLE.TAG, constantObj.getTag(), "Initialized incorrect type" );
+
+        ConstantMethodHandle methodHandle = ( ConstantMethodHandle ) constantObj;
 
         assertAll("Check properties", 
             // Check name index 
@@ -432,6 +542,9 @@ class ParseUtilitiesTest {
         // Wrap ByteArrayOutputStream instance in a DataOutputStream instance
         DataOutputStream outDataStream = new DataOutputStream(outByteStream);
 
+        // Write ConstantMethodType tag
+        outDataStream.writeByte( ConstantTag.METHODTYPE.TAG );
+
         // Write mock ConstantMethodType data
         outDataStream.writeShort(testCase);
 
@@ -444,7 +557,13 @@ class ParseUtilitiesTest {
         // Create mockStream
         DataInputStream mockStream = new DataInputStream(inByteStream);
        
-        ConstantMethodType methodType = Parse.buildConstantMethodType(mockStream);
+        CPoolParser parser = new CPoolParser( mockStream );
+        
+        Constant constantObj = parser.parse();
+
+        assertEquals( ConstantTag.METHODTYPE.TAG, constantObj.getTag(), "Initialized incorrect type" );
+
+        ConstantMethodType methodType = ( ConstantMethodType ) constantObj;
 
         assertAll("Check properties", 
             // Check name index 
@@ -463,6 +582,9 @@ class ParseUtilitiesTest {
 
         // Wrap ByteArrayOutputStream instance in a DataOutputStream instance
         DataOutputStream outDataStream = new DataOutputStream(outByteStream);
+        
+        // Write ConstantDynamic tag
+        outDataStream.writeByte( ConstantTag.DYNAMIC.TAG );
 
         // Write mock ConstantDynamic data
         outDataStream.writeShort(testCase);
@@ -477,7 +599,13 @@ class ParseUtilitiesTest {
         // Create mockStream
         DataInputStream mockStream = new DataInputStream(inByteStream);
        
-        ConstantDynamic dynamic = Parse.buildConstantDynamic(mockStream);
+        CPoolParser parser = new CPoolParser( mockStream );
+        
+        Constant constantObj = parser.parse();
+
+        assertEquals( ConstantTag.DYNAMIC.TAG, constantObj.getTag(), "Initialized incorrect type" );
+
+        ConstantDynamic dynamic = ( ConstantDynamic ) constantObj;
 
         assertAll("Check properties", 
             // Check name index 
@@ -497,6 +625,9 @@ class ParseUtilitiesTest {
 
         // Wrap ByteArrayOutputStream instance in a DataOutputStream instance
         DataOutputStream outDataStream = new DataOutputStream(outByteStream);
+        
+        // Write ConstantInvokeDynamic tag
+        outDataStream.writeByte( ConstantTag.INVOKEDYNAMIC.TAG );
 
         // Write mock ConstantInvokeDynamic data
         outDataStream.writeShort(testCase);
@@ -511,7 +642,13 @@ class ParseUtilitiesTest {
         // Create mockStream
         DataInputStream mockStream = new DataInputStream(inByteStream);
        
-        ConstantInvokeDynamic invokeDynamic = Parse.buildConstantInvokeDynamic(mockStream);
+        CPoolParser parser = new CPoolParser( mockStream );
+        
+        Constant constantObj = parser.parse();
+
+        assertEquals( ConstantTag.INVOKEDYNAMIC.TAG, constantObj.getTag(), "Initialized incorrect type" );
+
+        ConstantInvokeDynamic invokeDynamic = ( ConstantInvokeDynamic ) constantObj;
 
         assertAll("Check properties", 
             // Check name index 
@@ -531,6 +668,9 @@ class ParseUtilitiesTest {
 
         // Wrap ByteArrayOutputStream instance in a DataOutputStream instance
         DataOutputStream outDataStream = new DataOutputStream(outByteStream);
+        
+        // Write ConstantModule tag;
+        outDataStream.writeByte( ConstantTag.MODULE.TAG );
 
         // Write mock ConstantModule data
         outDataStream.writeShort(testCase);
@@ -544,7 +684,13 @@ class ParseUtilitiesTest {
         // Create mockStream
         DataInputStream mockStream = new DataInputStream(inByteStream);
        
-        ConstantModule module = Parse.buildConstantModule(mockStream);
+        CPoolParser parser = new CPoolParser( mockStream );
+        
+        Constant constantObj = parser.parse();
+
+        assertEquals( ConstantTag.MODULE.TAG, constantObj.getTag(), "Initialized incorrect type" );
+
+        ConstantModule module = ( ConstantModule ) constantObj;
 
         assertAll("Check properties", 
             // Check name index 
@@ -563,8 +709,11 @@ class ParseUtilitiesTest {
 
         // Wrap ByteArrayOutputStream instance in a DataOutputStream instance
         DataOutputStream outDataStream = new DataOutputStream(outByteStream);
-
-        // Write mock ConstantModule data
+        
+        // Write ConstantPackage tag
+        outDataStream.writeByte( ConstantTag.PACKAGE.TAG );
+        
+        // Write mock ConstantPackage data
         outDataStream.writeShort(testCase);
 
         // Convert to byte[]
@@ -576,7 +725,13 @@ class ParseUtilitiesTest {
         // Create mockStream
         DataInputStream mockStream = new DataInputStream(inByteStream);
        
-        ConstantPackage packageObj = Parse.buildConstantPackage(mockStream);
+        CPoolParser parser = new CPoolParser( mockStream );
+        
+        Constant constantObj = parser.parse();
+
+        assertEquals( ConstantTag.PACKAGE.TAG, constantObj.getTag(), "Initialized incorrect type" );
+
+        ConstantPackage packageObj = ( ConstantPackage ) constantObj;
 
         assertAll("Check properties", 
             // Check name index 

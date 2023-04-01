@@ -14,974 +14,254 @@ import org.junit.jupiter.api.Nested;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ConstantPoolTest {
-    static class TypeStates{
-        static String testCase;
+    
+    static DataInputStream mockStream;
+    
+
+    static class TypeStates {
+        
+        static String strTC = "CafeBabe";
+        static int u2TC = 0xFFFF;
+        static int u4TC = 0xFFFF_FFFF;
+        static long longTC = 0xFFFF_FFFF_FFFF_FFFFL;
+        static float floatTC = 3.14f;
+        static double doubleTC = 1.7976931348623157e308;
+    
     }
+
 
     @BeforeAll
-    static void setUpStates(){
-        TypeStates.testCase = "TestUTF";
+    static void setUpMockStream() {
+
+
+        // Create a ByteArrayOutputStream
+        ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
+
+        // Wrap ByteArrayOutputStream instance in a DataOutputStream instance
+        DataOutputStream outDataStream = new DataOutputStream( outByteStream );
+       
+        // Write mock UTF data
+        outDataStream.writeByte( ConstantTag.UTF.TAG );
+        outDataStream.writeUTF( TypeStates.strTC );
+        
+        // Write mock integer data
+        outDataStream.writeByte( ConstantTag.INTEGER.TAG );
+        outDataStream.writeInt( TypeStates.u4TC );
+        
+        // Write mock float data
+        outDataStream.writeByte( ConstantTag.FLOAT.TAG );
+        outDataStream.writeFloat( TypeStates.floatTC );
+        
+        // Write mock long data
+        outDataStream.writeByte( ConstantTag.LONG.TAG );
+        outDataStream.writeLong( TypeStates.longTC );
+        
+        // Write mock double data
+        outDataStream.writeByte( ConstantTag.DOUBLE.TAG );
+        outDataStream.writeDouble( TypeStates.doubleTC );
+        
+        // Write mock class data 
+        outDataStream.writeByte(ConstantTag.CLASS.TAG);
+        outDataStream.writeShort( TypeStates.u2TC );
+        
+        // Write mock string data 
+        outDataStream.writeByte(ConstantTag.STRING.TAG);
+        outDataStream.writeShort( TypeStates.u2TC );
+        
+        // Write mock field ref data 
+        outDataStream.writeByte(ConstantTag.FIELDREF.TAG);
+        outDataStream.writeShort(TypeStates.u2TC);
+        outDataStream.writeShort(TypeStates.u2TC);
+        
+        // Write mock method ref data 
+        outDataStream.writeByte(ConstantTag.METHODREF.TAG);
+        outDataStream.writeShort(TypeStates.u2TC);
+        outDataStream.writeShort(TypeStates.u2TC);
+        
+        // Write mock interface method ref data 
+        outDataStream.writeByte(ConstantTag.INTERFACE_METHODREF.TAG);
+        outDataStream.writeShort(TypeStates.u2TC);
+        outDataStream.writeShort(TypeStates.u2TC);
+
+        // Write mock ConstantNameAndType data 
+        outDataStream.writeByte(ConstantTag.NAMEANDTYPE.TAG);
+        outDataStream.writeShort(TypeStates.u2TC);
+        outDataStream.writeShort(TypeStates.u2TC);
+
+        // Write mock ConstantMethodHandle data 
+        outDataStream.writeByte(ConstantTag.METHODHANDLE.TAG);
+        outDataStream.writeShort(TypeStates.u2TC);
+        outDataStream.writeShort(TypeStates.u2TC);
+
+        // Write mock ConstantMethodType data 
+        outDataStream.writeByte(ConstantTag.METHODTYPE.TAG);
+        outDataStream.writeShort(TypeStates.u2TC);
+
+        // Write mock ConstantDynamic data 
+        outDataStream.writeByte(ConstantTag.DYNAMIC.TAG);
+        outDataStream.writeShort(TypeStates.u2TC);
+        outDataStream.writeShort(TypeStates.u2TC);
+
+        // Write mock ConstantInvokeDynamic data 
+        outDataStream.writeByte(ConstantTag.INVOKEDYNAMIC.TAG);
+        outDataStream.writeShort(TypeStates.u2TC);
+        outDataStream.writeShort(TypeStates.u2TC);
+
+        // Write mock Module data 
+        outDataStream.writeByte(ConstantTag.MODULE.TAG);
+        outDataStream.writeShort(TypeStates.u2TC);
+
+        // Write mock Package data 
+        outDataStream.writeByte(ConstantTag.PACKAGE.TAG);
+        outDataStream.writeShort(TypeStates.u2TC);
+
+
+        // Convert to byte[]
+        byte[] byteArray = outByteStream.toByteArray();
+
+        // Create new input stream
+        ByteArrayInputStream inByteStream = new ByteArrayInputStream( byteArray );
+        
+        // Create mockStream
+        ConstantPoolTest.mockStream = new DataInputStream( inByteStream );
+    
     }
 
+
     @Nested
-    class objInitialization {
-        @Nested
-        class whenUTF{
-             static Constant[] rawCPool; 
-    //         static String testCase = "TestUTF";
-            
-            @BeforeAll
-            static void setUp() throws IOException {
-                
-                // Create a ByteArrayOutputStream
-                ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
+    class Init {
+        static int cPoolCount;
+        static ConstantPool pool;
+        static Constant[] rawCPool; 
 
-                // Wrap ByteArrayOutputStream instance in a DataOutputStream instance
-                DataOutputStream outDataStream = new DataOutputStream(outByteStream);
-               
-                // Write tag for UTF
-                outDataStream.writeByte(ConstantTag.UTF.TAG);
-                
-                // Write mock UTF data
-                outDataStream.writeUTF(TypeStates.testCase);
-
-                // Convert to byte[]
-                byte[] byteArray = outByteStream.toByteArray();
-
-                // Create new input stream
-                ByteArrayInputStream inByteStream = new ByteArrayInputStream(byteArray);
-                
-                // Create mockStream
-                DataInputStream mockStream = new DataInputStream(inByteStream);
-                
-                // Populate a constant pool
-                ConstantPool cPool = new ConstantPool();
-                cPool.create(mockStream, 2);
-                whenUTF.rawCPool = cPool.getRawCPool();
-            }
-
-            @Test
-            void wasTypeInitializedCorrectly(){
-
-                // Checks if correct type was created
-                assertInstanceOf(ConstantUTF.class, whenUTF.rawCPool[0], "Initialized incorrect type");
-
-                ConstantUTF utfObj = (ConstantUTF)whenUTF.rawCPool[0];
-
-                assertAll("Check properties", 
-                    // Check LENGTH
-                    () -> assertEquals(ConstantPoolTest.TypeStates.testCase.getBytes().length, utfObj.getLen(), "Recorded incorrect length"),
-
-                    // Check DATA
-                    () -> assertArrayEquals(ConstantPoolTest.TypeStates.testCase.getBytes(), utfObj.getBytes(), "Stored incorrect bytes")
-                );
-            }
+        @BeforeAll
+        void setUp() { 
+        
+             Init.cPoolCount = 20;
+             Init.pool = new ConstantPool( ConstantPoolTest.mockStream, Init.cPoolCount );
+             Init.rawCPool = Init.pool.getRawCPool(); 
+        
         }
 
-        @Nested
-        class whenInteger{
-             static Constant[] rawCPool; 
-             static int testCase = 1542;
-            
-            @BeforeAll
-            static void setUp() throws IOException {
-                
-                // Create a ByteArrayOutputStream
-                ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
+        @Test
+        void utfInitialized() {
 
-                // Wrap ByteArrayOutputStream instance in a DataOutputStream instance
-                DataOutputStream outDataStream = new DataOutputStream(outByteStream);
-               
-                // Write tag for integer 
-                outDataStream.writeByte(ConstantTag.INTEGER.TAG);
-                
-                // Write mock integer data
-                outDataStream.writeInt(testCase);
+            assertInstanceOf( ConstantUTF.class, Init.rawCPool[ 0 ], "Initialized incorrect type" );
+        
+        }
 
-                // Convert to byte[]
-                byte[] byteArray = outByteStream.toByteArray();
+        @Test
+        void integerInitialized() {
 
-                // Create new input stream
-                ByteArrayInputStream inByteStream = new ByteArrayInputStream(byteArray);
-                
-                // Create mockStream
-                DataInputStream mockStream = new DataInputStream(inByteStream);
-                
-                // Populate a constant pool
-                ConstantPool cPool = new ConstantPool();
-                cPool.create(mockStream, 2);
+            assertInstanceOf( ConstantInteger.class, Init.rawCPool[ 1 ], "Initialized incorrect type" );
+        
+        }
 
-                //Get populated constant pool
-                whenInteger.rawCPool = cPool.getRawCPool();
-            }
+        @Test
+        void floatInitialized() {
 
-            @Test
-            void wasTypeInitializedCorrectly(){
-
-                // Checks if correct type was created
-                assertInstanceOf(ConstantInteger.class, whenInteger.rawCPool[0], "Initialized incorrect type");
-
-                ConstantInteger integerObj = (ConstantInteger)whenInteger.rawCPool[0];
-
-                assertAll("Check properties", 
-                    // Check LENGTH
-                    () -> assertEquals(testCase, integerObj.getValue(), "Stored incorrect value")
-                    
-                    /* If more properties are added to ConstantInteger, then they can be tested for here */
-                );
-            }
+            assertInstanceOf( ConstantFloat.class, Init.rawCPool[ 2 ], "Initialized incorrect type" );
+        
         }
         
-        @Nested
-        class whenFloat{
-             static Constant[] rawCPool; 
-             static float testCase = 3.5f;
-            
-            @BeforeAll
-            static void setUp() throws IOException {
-                
-                // Create a ByteArrayOutputStream
-                ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
+        @Test
+        void longInitialized() {
 
-                // Wrap ByteArrayOutputStream instance in a DataOutputStream instance
-                DataOutputStream outDataStream = new DataOutputStream(outByteStream);
-               
-                // Write tag for float 
-                outDataStream.writeByte(ConstantTag.FLOAT.TAG);
-                
-                // Write mock float data
-                outDataStream.writeFloat(testCase);
-
-                // Convert to byte[]
-                byte[] byteArray = outByteStream.toByteArray();
-
-                // Create new input stream
-                ByteArrayInputStream inByteStream = new ByteArrayInputStream(byteArray);
-                
-                // Create mockStream
-                DataInputStream mockStream = new DataInputStream(inByteStream);
-                
-                // Populate a constant pool
-                ConstantPool cPool = new ConstantPool();
-                cPool.create(mockStream, 2);
-                whenFloat.rawCPool = cPool.getRawCPool();
-            }
-
-            @Test
-            void wasTypeInitializedCorrectly(){
-
-                // Checks if correct type was created
-                assertInstanceOf(ConstantFloat.class, whenFloat.rawCPool[0], "Initialized incorrect type");
-
-                ConstantFloat floatObj = (ConstantFloat)whenFloat.rawCPool[0];
-
-                assertAll("Check properties", 
-                    // Check VALUE 
-                    () -> assertEquals(testCase, floatObj.getValue(), "Recorded incorrect value")
-                    
-                    /* If more properties are added to ConstantFloat, then they can be tested for here */
-                );
-            }
+            assertInstanceOf( ConstantLong.class, Init.rawCPool[ 3 ], "Initialized incorrect type" );
+            assertNull( Init.rawCPool[ 4 ], "Long parsed incorrectly" ); // Long should take 2 entries, the second null
+        
         }
         
-        @Nested
-        class whenLong{
-             static Constant[] rawCPool; 
-             static long testCase = 3147483647L;
-            
-            @BeforeAll
-            static void setUp() throws IOException {
-                
-                // Create a ByteArrayOutputStream
-                ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
+        @Test
+        void doubleInitialized() {
 
-                // Wrap ByteArrayOutputStream instance in a DataOutputStream instance
-                DataOutputStream outDataStream = new DataOutputStream(outByteStream);
-               
-                // Write tag for long 
-                outDataStream.writeByte(ConstantTag.LONG.TAG);
-                
-                // Write mock long data
-                outDataStream.writeLong(testCase);
-
-                // Convert to byte[]
-                byte[] byteArray = outByteStream.toByteArray();
-
-                // Create new input stream
-                ByteArrayInputStream inByteStream = new ByteArrayInputStream(byteArray);
-                
-                // Create mockStream
-                DataInputStream mockStream = new DataInputStream(inByteStream);
-                
-                // Populate a constant pool
-                ConstantPool cPool = new ConstantPool();
-                cPool.create(mockStream, 3);
-                whenLong.rawCPool = cPool.getRawCPool();
-            }
-
-            @Test
-            void wasTypeInitializedCorrectly(){
-
-                // Checks if correct type was created
-                assertInstanceOf(ConstantLong.class, whenLong.rawCPool[0], "Initialized incorrect type");
-
-                ConstantLong longObj = (ConstantLong)whenLong.rawCPool[0];
-
-                assertAll("Check properties", 
-                    // Check VALUE 
-                    () -> assertEquals(testCase, longObj.getValue(), "Recorded incorrect value")
-                    
-                    /* If more properties are added to ConstantFloat, then they can be tested for here */
-                );
-            }
+            assertInstanceOf( ConstantDouble.class, Init.rawCPool[ 5 ], "Initialized incorrect type" );
+            assertNull( Init.rawCPool[ 6 ], "Long parsed incorrectly" ); // Double should take 2 entries, the second null
+        
         }
         
-        @Nested
-        class whenDouble{
-             static Constant[] rawCPool; 
-             static double testCase = 3.14;
-            
-            @BeforeAll
-            static void setUp() throws IOException {
-                
-                // Create a ByteArrayOutputStream
-                ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
+        @Test
+        void classInitialized() {
 
-                // Wrap ByteArrayOutputStream instance in a DataOutputStream instance
-                DataOutputStream outDataStream = new DataOutputStream(outByteStream);
-               
-                // Write tag for double 
-                outDataStream.writeByte(ConstantTag.DOUBLE.TAG);
-                
-                // Write mock long data
-                outDataStream.writeDouble(testCase);
-
-                // Convert to byte[]
-                byte[] byteArray = outByteStream.toByteArray();
-
-                // Create new input stream
-                ByteArrayInputStream inByteStream = new ByteArrayInputStream(byteArray);
-                
-                // Create mockStream
-                DataInputStream mockStream = new DataInputStream(inByteStream);
-                
-                // Populate a constant pool
-                ConstantPool cPool = new ConstantPool();
-                cPool.create(mockStream, 3);
-                whenDouble.rawCPool = cPool.getRawCPool();
-            }
-
-            @Test
-            void wasTypeInitializedCorrectly(){
-
-                // Checks if correct type was created
-                assertInstanceOf(ConstantDouble.class, whenDouble.rawCPool[0], "Initialized incorrect type");
-
-                ConstantDouble doubleObj = (ConstantDouble)whenDouble.rawCPool[0];
-
-                assertAll("Check properties", 
-                    // Check VALUE 
-                    () -> assertEquals(testCase, doubleObj.getValue(), "Recorded incorrect value")
-                    
-                    /* If more properties are added to ConstantFloat, then they can be tested for here */
-                );
-            }
+            assertInstanceOf( ConstantClass.class, Init.rawCPool[ 7 ], "Initialized incorrect type" );
+        
         }
         
-        @Nested
-        class whenClass{
-             static Constant[] rawCPool; 
-             static int testCase = 0xffff;
-            
-            @BeforeAll
-            static void setUp() throws IOException {
-                
-                // Create a ByteArrayOutputStream
-                ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
+        @Test
+        void stringInitialized() {
 
-                // Wrap ByteArrayOutputStream instance in a DataOutputStream instance
-                DataOutputStream outDataStream = new DataOutputStream(outByteStream);
-               
-                // Write tag for class 
-                outDataStream.writeByte(ConstantTag.CLASS.TAG);
-                
-                // Write mock class data 
-                outDataStream.writeShort(testCase);
-
-                // Convert to byte[]
-                byte[] byteArray = outByteStream.toByteArray();
-
-                // Create new input stream
-                ByteArrayInputStream inByteStream = new ByteArrayInputStream(byteArray);
-                
-                // Create mockStream
-                DataInputStream mockStream = new DataInputStream(inByteStream);
-                
-                // Populate a constant pool
-                ConstantPool cPool = new ConstantPool();
-                cPool.create(mockStream, 2);
-                whenClass.rawCPool = cPool.getRawCPool();
-            }
-
-            @Test
-            void wasTypeInitializedCorrectly(){
-
-                // Checks if correct type was created
-                assertInstanceOf(ConstantClass.class, whenClass.rawCPool[0], "Initialized incorrect type");
-
-                ConstantClass classObj = (ConstantClass)whenClass.rawCPool[0];
-
-                assertAll("Check properties", 
-                    // Check VALUE 
-                    () -> assertEquals(testCase, classObj.getNameIndex(), "Recorded incorrect value")
-                    
-                    /* If more properties are added to ConstantFloat, then they can be tested for here */
-                );
-            }
+            assertInstanceOf( ConstantString.class, Init.rawCPool[ 8 ], "Initialized incorrect type" );
+        
         }
         
-        @Nested
-        class whenString{
-             static Constant[] rawCPool; 
-             static int testCase = 7;
-            
-            @BeforeAll
-            static void setUp() throws IOException {
-                
-                // Create a ByteArrayOutputStream
-                ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
+        @Test
+        void fieldRefInitialized() {
 
-                // Wrap ByteArrayOutputStream instance in a DataOutputStream instance
-                DataOutputStream outDataStream = new DataOutputStream(outByteStream);
-               
-                // Write tag for string 
-                outDataStream.writeByte(ConstantTag.STRING.TAG);
-                
-                // Write mock class data 
-                outDataStream.writeShort(testCase);
-
-                // Convert to byte[]
-                byte[] byteArray = outByteStream.toByteArray();
-
-                // Create new input stream
-                ByteArrayInputStream inByteStream = new ByteArrayInputStream(byteArray);
-                
-                // Create mockStream
-                DataInputStream mockStream = new DataInputStream(inByteStream);
-                
-                // Populate a constant pool
-                ConstantPool cPool = new ConstantPool();
-                cPool.create(mockStream, 2);
-                whenString.rawCPool = cPool.getRawCPool();
-            }
-
-            @Test
-            void wasTypeInitializedCorrectly(){
-
-                // Checks if correct type was created
-                assertInstanceOf(ConstantString.class, whenString.rawCPool[0], "Initialized incorrect type");
-
-                ConstantString stringObj = (ConstantString)whenString.rawCPool[0];
-
-                assertAll("Check properties", 
-                    // Check VALUE 
-                    () -> assertEquals(testCase, stringObj.getStringIndex(), "Recorded incorrect value")
-                    
-                    /* If more properties are added to ConstantFloat, then they can be tested for here */
-                );
-            }
+            assertInstanceOf( ConstantFieldRef.class, Init.rawCPool[ 9 ], "Initialized incorrect type" );
+        
         }
         
-        @Nested
-        class whenFieldRef{
-             static Constant[] rawCPool; 
-             static int classIndex = 7;
-             static int ntIndex = 23; 
-            
-            @BeforeAll
-            static void setUp() throws IOException {
-                
-                // Create a ByteArrayOutputStream
-                ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
+        @Test
+        void methodRefInitialized() {
 
-                // Wrap ByteArrayOutputStream instance in a DataOutputStream instance
-                DataOutputStream outDataStream = new DataOutputStream(outByteStream);
-               
-                // Write tag for field ref 
-                outDataStream.writeByte(ConstantTag.FIELDREF.TAG);
-                
-                // Write mock field ref data 
-                outDataStream.writeShort(classIndex);
-                outDataStream.writeShort(ntIndex);
-
-                // Convert to byte[]
-                byte[] byteArray = outByteStream.toByteArray();
-
-                // Create new input stream
-                ByteArrayInputStream inByteStream = new ByteArrayInputStream(byteArray);
-                
-                // Create mockStream
-                DataInputStream mockStream = new DataInputStream(inByteStream);
-                
-                // Populate a constant pool
-                ConstantPool cPool = new ConstantPool();
-                cPool.create(mockStream, 2);
-                whenFieldRef.rawCPool = cPool.getRawCPool();
-            }
-
-            @Test
-            void wasTypeInitializedCorrectly(){
-
-                // Checks if correct type was created
-                assertInstanceOf(ConstantFieldRef.class, whenFieldRef.rawCPool[0], "Initialized incorrect type");
-
-                ConstantFieldRef fieldRefObj = (ConstantFieldRef)whenFieldRef.rawCPool[0];
-
-                assertAll("Check properties", 
-                    // Check class index 
-                    () -> assertEquals(classIndex, fieldRefObj.getClassIndex(), "Recorded incorrect value"),
-                    
-                    // Check name index 
-                    () -> assertEquals(ntIndex, fieldRefObj.getNTIndex(), "Recorded incorrect value")
-                    
-                    /* If more properties are added to ConstantFloat, then they can be tested for here */
-                );
-            }
+            assertInstanceOf( ConstantMethodRef.class, Init.rawCPool[ 10 ], "Initialized incorrect type" );
+        
         }
         
-        @Nested
-        class whenMethodRef{
-             static Constant[] rawCPool; 
-             static int classIndex = 7;
-             static int ntIndex = 23; 
-            
-            @BeforeAll
-            static void setUp() throws IOException {
-                
-                // Create a ByteArrayOutputStream
-                ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
+        @Test
+        void interfaceMethodRefInitialized() {
 
-                // Wrap ByteArrayOutputStream instance in a DataOutputStream instance
-                DataOutputStream outDataStream = new DataOutputStream(outByteStream);
-               
-                // Write tag for method ref 
-                outDataStream.writeByte(ConstantTag.METHODREF.TAG);
-                
-                // Write mock method ref data 
-                outDataStream.writeShort(classIndex);
-                outDataStream.writeShort(ntIndex);
-
-                // Convert to byte[]
-                byte[] byteArray = outByteStream.toByteArray();
-
-                // Create new input stream
-                ByteArrayInputStream inByteStream = new ByteArrayInputStream(byteArray);
-                
-                // Create mockStream
-                DataInputStream mockStream = new DataInputStream(inByteStream);
-                
-                // Populate a constant pool
-                ConstantPool cPool = new ConstantPool();
-                cPool.create(mockStream, 2);
-                whenMethodRef.rawCPool = cPool.getRawCPool();
-            }
-
-            @Test
-            void wasTypeInitializedCorrectly(){
-
-                // Checks if correct type was created
-                assertInstanceOf(ConstantMethodRef.class, whenMethodRef.rawCPool[0], "Initialized incorrect type");
-
-                ConstantMethodRef methodRefObj = (ConstantMethodRef)whenMethodRef.rawCPool[0];
-
-                assertAll("Check properties", 
-                    // Check class index 
-                    () -> assertEquals(classIndex, methodRefObj.getClassIndex(), "Recorded incorrect value"),
-                    
-                    // Check name index 
-                    () -> assertEquals(ntIndex, methodRefObj.getNTIndex(), "Recorded incorrect value")
-                    
-                    /* If more properties are added to ConstantFloat, then they can be tested for here */
-                );
-            }
+            assertInstanceOf( ConstantInterfaceMethodRef.class, Init.rawCPool[ 11 ], "Initialized incorrect type" );
+        
         }
         
-        @Nested
-        class whenInterfaceMethodRef{
-             static Constant[] rawCPool; 
-             static int classIndex = 7;
-             static int ntIndex = 23; 
-            
-            @BeforeAll
-            static void setUp() throws IOException {
-                
-                // Create a ByteArrayOutputStream
-                ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
+        @Test
+        void ntInitialized() {
 
-                // Wrap ByteArrayOutputStream instance in a DataOutputStream instance
-                DataOutputStream outDataStream = new DataOutputStream(outByteStream);
-               
-                // Write tag for interface method ref 
-                outDataStream.writeByte(ConstantTag.INTERFACE_METHODREF.TAG);
-                
-                // Write mock interface method ref data 
-                outDataStream.writeShort(classIndex);
-                outDataStream.writeShort(ntIndex);
-
-                // Convert to byte[]
-                byte[] byteArray = outByteStream.toByteArray();
-
-                // Create new input stream
-                ByteArrayInputStream inByteStream = new ByteArrayInputStream(byteArray);
-                
-                // Create mockStream
-                DataInputStream mockStream = new DataInputStream(inByteStream);
-                
-                // Populate a constant pool
-                ConstantPool cPool = new ConstantPool();
-                cPool.create(mockStream, 2);
-                whenInterfaceMethodRef.rawCPool = cPool.getRawCPool();
-            }
-
-            @Test
-            void wasTypeInitializedCorrectly(){
-
-                // Checks if correct type was created
-                assertInstanceOf(ConstantInterfaceMethodRef.class, whenInterfaceMethodRef.rawCPool[0], "Initialized incorrect type");
-
-                ConstantInterfaceMethodRef interfaceMethodRefObj = (ConstantInterfaceMethodRef)whenInterfaceMethodRef.rawCPool[0];
-
-                assertAll("Check properties", 
-                    // Check class index 
-                    () -> assertEquals(classIndex, interfaceMethodRefObj.getClassIndex(), "Recorded incorrect value"),
-                    
-                    // Check name index 
-                    () -> assertEquals(ntIndex, interfaceMethodRefObj.getNTIndex(), "Recorded incorrect value")
-                    
-                    /* If more properties are added to ConstantFloat, then they can be tested for here */
-                );
-            }
+            assertInstanceOf( ConstantNameAndType.class, Init.rawCPool[ 12 ], "Initialized incorrect type" );
+        
         }
         
-        @Nested
-        class whenNameAndType{
-             static Constant[] rawCPool; 
-             static int nameIndex = 7;
-             static int descriptorIndex = 23; 
-            
-            @BeforeAll
-            static void setUp() throws IOException {
-                
-                // Create a ByteArrayOutputStream
-                ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
+        @Test
+        void methodHandleInitialized() {
 
-                // Wrap ByteArrayOutputStream instance in a DataOutputStream instance
-                DataOutputStream outDataStream = new DataOutputStream(outByteStream);
-               
-                // Write tag for ConstantNameAndType 
-                outDataStream.writeByte(ConstantTag.NAMEANDTYPE.TAG);
-                
-                // Write mock ConstantNameAndType data 
-                outDataStream.writeShort(nameIndex);
-                outDataStream.writeShort(descriptorIndex);
-
-                // Convert to byte[]
-                byte[] byteArray = outByteStream.toByteArray();
-
-                // Create new input stream
-                ByteArrayInputStream inByteStream = new ByteArrayInputStream(byteArray);
-                
-                // Create mockStream
-                DataInputStream mockStream = new DataInputStream(inByteStream);
-                
-                // Populate a constant pool
-                ConstantPool cPool = new ConstantPool();
-                cPool.create(mockStream, 2);
-                whenNameAndType.rawCPool = cPool.getRawCPool();
-            }
-
-            @Test
-            void wasTypeInitializedCorrectly(){
-
-                // Checks if correct type was created
-                assertInstanceOf(ConstantNameAndType.class, whenNameAndType.rawCPool[0], "Initialized incorrect type");
-
-                ConstantNameAndType ntObj = (ConstantNameAndType)whenNameAndType.rawCPool[0];
-
-                assertAll("Check properties", 
-                    // Check name index 
-                    () -> assertEquals(nameIndex, ntObj.getNameIndex(), "Recorded incorrect value"),
-                    
-                    // Check descriptor index 
-                    () -> assertEquals(descriptorIndex, ntObj.getDescriptorIndex(), "Recorded incorrect value")
-                    
-                    /* If more properties are added to ConstantFloat, then they can be tested for here */
-                );
-            }
+            assertInstanceOf( ConstantMethodHandle.class, Init.rawCPool[ 13 ], "Initialized incorrect type" );
+        
         }
         
-        @Nested
-        class whenMethodHandle{
-             static Constant[] rawCPool; 
-             static int refKind = 7;
-             static int index = 23; 
-            
-            @BeforeAll
-            static void setUp() throws IOException {
-                
-                // Create a ByteArrayOutputStream
-                ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
+        @Test
+        void methodTypeInitialized() {
 
-                // Wrap ByteArrayOutputStream instance in a DataOutputStream instance
-                DataOutputStream outDataStream = new DataOutputStream(outByteStream);
-               
-                // Write tag for ConstantMethodHandle 
-                outDataStream.writeByte(ConstantTag.METHODHANDLE.TAG);
-                
-                // Write mock ConstantMethodHandle data 
-                outDataStream.writeShort(refKind);
-                outDataStream.writeShort(index);
-
-                // Convert to byte[]
-                byte[] byteArray = outByteStream.toByteArray();
-
-                // Create new input stream
-                ByteArrayInputStream inByteStream = new ByteArrayInputStream(byteArray);
-                
-                // Create mockStream
-                DataInputStream mockStream = new DataInputStream(inByteStream);
-                
-                // Populate a constant pool
-                ConstantPool cPool = new ConstantPool();
-                cPool.create(mockStream, 2);
-                whenMethodHandle.rawCPool = cPool.getRawCPool();
-            }
-
-            @Test
-            void wasTypeInitializedCorrectly(){
-
-                // Checks if correct type was created
-                assertInstanceOf(ConstantMethodHandle.class, whenMethodHandle.rawCPool[0], "Initialized incorrect type");
-
-                ConstantMethodHandle methodHandle = (ConstantMethodHandle)whenMethodHandle.rawCPool[0];
-
-                assertAll("Check properties", 
-                    // Check name index 
-                    () -> assertEquals(refKind, methodHandle.getRefKind(), "Recorded incorrect value"),
-                    
-                    // Check descriptor index 
-                    () -> assertEquals(index, methodHandle.getIndex(), "Recorded incorrect value")
-                    
-                    /* If more properties are added to ConstantFloat, then they can be tested for here */
-                );
-            }
+            assertInstanceOf( ConstantMethodType.class, Init.rawCPool[ 14 ], "Initialized incorrect type" );
+        
         }
         
-        @Nested
-        class whenMethodType{
-             static Constant[] rawCPool; 
-             static int descriptorIndex = 7;
-            
-            @BeforeAll
-            static void setUp() throws IOException {
-                
-                // Create a ByteArrayOutputStream
-                ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
+        @Test
+        void dynamicInitialized() {
 
-                // Wrap ByteArrayOutputStream instance in a DataOutputStream instance
-                DataOutputStream outDataStream = new DataOutputStream(outByteStream);
-               
-                // Write tag for ConstantMethodType 
-                outDataStream.writeByte(ConstantTag.METHODTYPE.TAG);
-                
-                // Write mock ConstantMethodType data 
-                outDataStream.writeShort(descriptorIndex);
-
-                // Convert to byte[]
-                byte[] byteArray = outByteStream.toByteArray();
-
-                // Create new input stream
-                ByteArrayInputStream inByteStream = new ByteArrayInputStream(byteArray);
-                
-                // Create mockStream
-                DataInputStream mockStream = new DataInputStream(inByteStream);
-                
-                // Populate a constant pool
-                ConstantPool cPool = new ConstantPool();
-                cPool.create(mockStream, 2);
-                whenMethodType.rawCPool = cPool.getRawCPool();
-            }
-
-            @Test
-            void wasTypeInitializedCorrectly(){
-
-                // Checks if correct type was created
-                assertInstanceOf(ConstantMethodType.class, whenMethodType.rawCPool[0], "Initialized incorrect type");
-
-                ConstantMethodType methodType = (ConstantMethodType)whenMethodType.rawCPool[0];
-
-                assertAll("Check properties", 
-                    // Check name index 
-                    () -> assertEquals(descriptorIndex, methodType.getDescriptorIndex(), "Recorded incorrect value")
-                    
-                    /* If more properties are added to ConstantFloat, then they can be tested for here */
-                );
-            }
+            assertInstanceOf( ConstantDynamic.class, Init.rawCPool[ 15 ], "Initialized incorrect type" );
+        
         }
         
-        @Nested
-        class whenDynamic{
-             static Constant[] rawCPool; 
-             static int bootstrapMethodAttrIndex = 7;
-             static int ntIndex = 34;
+        @Test
+        void invokeDynamicInitialized() {
 
-            @BeforeAll
-            static void setUp() throws IOException {
-                
-                // Create a ByteArrayOutputStream
-                ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
-
-                // Wrap ByteArrayOutputStream instance in a DataOutputStream instance
-                DataOutputStream outDataStream = new DataOutputStream(outByteStream);
-               
-                // Write tag for ConstantDynamic 
-                outDataStream.writeByte(ConstantTag.DYNAMIC.TAG);
-                
-                // Write mock ConstantDynamic data 
-                outDataStream.writeShort(bootstrapMethodAttrIndex);
-                outDataStream.writeShort(ntIndex);
-
-                // Convert to byte[]
-                byte[] byteArray = outByteStream.toByteArray();
-
-                // Create new input stream
-                ByteArrayInputStream inByteStream = new ByteArrayInputStream(byteArray);
-                
-                // Create mockStream
-                DataInputStream mockStream = new DataInputStream(inByteStream);
-                
-                // Populate a constant pool
-                ConstantPool cPool = new ConstantPool();
-                cPool.create(mockStream, 2);
-                whenDynamic.rawCPool = cPool.getRawCPool();
-            }
-
-            @Test
-            void wasTypeInitializedCorrectly(){
-
-                // Checks if correct type was created
-                assertInstanceOf(ConstantDynamic.class, whenDynamic.rawCPool[0], "Initialized incorrect type");
-
-                ConstantDynamic dynamic = (ConstantDynamic)whenDynamic.rawCPool[0];
-
-                assertAll("Check properties", 
-                    // Check name index 
-                    () -> assertEquals(bootstrapMethodAttrIndex, dynamic.getBootstrapMethodAttrIndex(), "Recorded incorrect value"),
-                    () -> assertEquals(ntIndex, dynamic.getNTIndex(), "Recorded incorrect value")
-                    
-                    /* If more properties are added to ConstantFloat, then they can be tested for here */
-                );
-            }
-        }
-
-        @Nested
-        class whenInvokeDynamic{
-             static Constant[] rawCPool; 
-             static int bootstrapMethodAttrIndex = 7;
-             static int ntIndex = 34;
-
-            @BeforeAll
-            static void setUp() throws IOException {
-                
-                // Create a ByteArrayOutputStream
-                ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
-
-                // Wrap ByteArrayOutputStream instance in a DataOutputStream instance
-                DataOutputStream outDataStream = new DataOutputStream(outByteStream);
-               
-                // Write tag for ConstantInvokeDynamic 
-                outDataStream.writeByte(ConstantTag.INVOKEDYNAMIC.TAG);
-                
-                // Write mock ConstantInvokeDynamic data 
-                outDataStream.writeShort(bootstrapMethodAttrIndex);
-                outDataStream.writeShort(ntIndex);
-
-                // Convert to byte[]
-                byte[] byteArray = outByteStream.toByteArray();
-
-                // Create new input stream
-                ByteArrayInputStream inByteStream = new ByteArrayInputStream(byteArray);
-                
-                // Create mockStream
-                DataInputStream mockStream = new DataInputStream(inByteStream);
-                
-                // Populate a constant pool
-                ConstantPool cPool = new ConstantPool();
-                cPool.create(mockStream, 2);
-                whenInvokeDynamic.rawCPool = cPool.getRawCPool();
-            }
-
-            @Test
-            void wasTypeInitializedCorrectly(){
-
-                // Checks if correct type was created
-                assertInstanceOf(ConstantInvokeDynamic.class, whenInvokeDynamic.rawCPool[0], "Initialized incorrect type");
-
-                ConstantInvokeDynamic invokeDynamic = (ConstantInvokeDynamic)whenInvokeDynamic.rawCPool[0];
-
-                assertAll("Check properties", 
-                    // Check name index 
-                    () -> assertEquals(bootstrapMethodAttrIndex, invokeDynamic.getBootstrapMethodAttrIndex(), "Recorded incorrect value"),
-                    () -> assertEquals(ntIndex, invokeDynamic.getNTIndex(), "Recorded incorrect value")
-                    
-                    /* If more properties are added to ConstantFloat, then they can be tested for here */
-                );
-            }
+            assertInstanceOf( ConstantInvokeDynamic.class, Init.rawCPool[ 16 ], "Initialized incorrect type" );
+        
         }
         
-        @Nested
-        class whenModule{
-             static Constant[] rawCPool; 
-             static int nameIndex = 7;
-            
-            @BeforeAll
-            static void setUp() throws IOException {
-                
-                // Create a ByteArrayOutputStream
-                ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
+        @Test
+        void moduleInitialized() {
 
-                // Wrap ByteArrayOutputStream instance in a DataOutputStream instance
-                DataOutputStream outDataStream = new DataOutputStream(outByteStream);
-               
-                // Write tag for Module 
-                outDataStream.writeByte(ConstantTag.MODULE.TAG);
-                
-                // Write mock Module data 
-                outDataStream.writeShort(nameIndex);
-
-                // Convert to byte[]
-                byte[] byteArray = outByteStream.toByteArray();
-
-                // Create new input stream
-                ByteArrayInputStream inByteStream = new ByteArrayInputStream(byteArray);
-                
-                // Create mockStream
-                DataInputStream mockStream = new DataInputStream(inByteStream);
-                
-                // Populate a constant pool
-                ConstantPool cPool = new ConstantPool();
-                cPool.create(mockStream, 2);
-                whenModule.rawCPool = cPool.getRawCPool();
-            }
-
-            @Test
-            void wasTypeInitializedCorrectly(){
-
-                // Checks if correct type was created
-                assertInstanceOf(ConstantModule.class, whenModule.rawCPool[0], "Initialized incorrect type");
-
-                ConstantModule module = (ConstantModule)whenModule.rawCPool[0];
-
-                assertAll("Check properties", 
-                    // Check name index 
-                    () -> assertEquals(nameIndex, module.getNameIndex(), "Recorded incorrect value")
-                    
-                    /* If more properties are added to ConstantFloat, then they can be tested for here */
-                );
-            }
+            assertInstanceOf( ConstantModule.class, Init.rawCPool[ 17 ], "Initialized incorrect type" );
+        
         }
         
-        @Nested
-        class whenPackage{
-             static Constant[] rawCPool; 
-             static int nameIndex = 7;
-            
-            @BeforeAll
-            static void setUp() throws IOException {
-                
-                // Create a ByteArrayOutputStream
-                ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
+        @Test
+        void packageInitialized() {
 
-                // Wrap ByteArrayOutputStream instance in a DataOutputStream instance
-                DataOutputStream outDataStream = new DataOutputStream(outByteStream);
-               
-                // Write tag for Package 
-                outDataStream.writeByte(ConstantTag.PACKAGE.TAG);
-                
-                // Write mock Package data 
-                outDataStream.writeShort(nameIndex);
-
-                // Convert to byte[]
-                byte[] byteArray = outByteStream.toByteArray();
-
-                // Create new input stream
-                ByteArrayInputStream inByteStream = new ByteArrayInputStream(byteArray);
-                
-                // Create mockStream
-                DataInputStream mockStream = new DataInputStream(inByteStream);
-                
-                // Populate a constant pool
-                ConstantPool cPool = new ConstantPool();
-                cPool.create(mockStream, 2);
-                whenPackage.rawCPool = cPool.getRawCPool();
-            }
-
-            @Test
-            void wasTypeInitializedCorrectly(){
-
-                // Checks if correct type was created
-                assertInstanceOf(ConstantPackage.class, whenPackage.rawCPool[0], "Initialized incorrect type");
-
-                ConstantPackage packageObj = (ConstantPackage)whenPackage.rawCPool[0];
-
-                assertAll("Check properties", 
-                    // Check name index 
-                    () -> assertEquals(nameIndex, packageObj.getNameIndex(), "Recorded incorrect value")
-                    
-                    /* If more properties are added to ConstantFloat, then they can be tested for here */
-                );
-            }
+            assertInstanceOf( ConstantPackage.class, Init.rawCPool[ 18 ], "Initialized incorrect type" );
+        
         }
-/*
-        @Nested
-        class withMultipleTypes{
-            static Constant[] rawCPool;
-
-            @BeforeAll
-            static void setUp() throws IOException{ 
-                // Create a ByteArrayOutputStream
-                ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
-
-                // Wrap ByteArrayOutputStream instance in a DataOutputStream instance
-                DataOutputStream outDataStream = new DataOutputStream(outByteStream);
-              //Begin looping through types here
-                
-                for (ConstantTag t : ConstantTag.values()){
-                    if (t.name() == "UTF"){
-                        // Write tag for UTF
-                        outDataStream.writeByte(ConstantTag.UTF.TAG);
-                        
-                        // Write mock UTF data
-                        outDataStream.writeUTF(testCase);
-                    }
-                }
-                // All types have been written at this point 
-                // Convert to byte[]
-                byte[] byteArray = outByteStream.toByteArray();
-
-                // Create new input stream
-                ByteArrayInputStream inByteStream = new ByteArrayInputStream(byteArray);
-                
-                // Create mockStream
-                DataInputStream mockStream = new DataInputStream(inByteStream);
-                
-                // Populate a constant pool
-                ConstantPool cPool = new ConstantPool();
-                cPool.create(mockStream, 2);
-                whenPackage.rawCPool = cPool.getRawCPool();
-                
-            }
-        }
-        */
     }
 }
