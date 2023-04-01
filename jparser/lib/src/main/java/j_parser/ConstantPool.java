@@ -11,17 +11,16 @@ import j_parser.utils.CPoolParser;
 
 public class ConstantPool{
     private  Constant[] cPool;
-    
-    int create(DataInputStream in, int constantPoolCount) throws IOException{
-        int totalBuilt = 0;
-        
+    private int constantCount = 0;
+
+    public ConstantPool(DataInputStream in, int constantPoolCount) throws IOException{
         CPoolParser parser = new CPoolParser( in );
 
         this.cPool = new Constant[constantPoolCount - 1];
         
         for ( int i = 0; i <= this.cPool.length - 1; ++i ) {
             this.cPool[ i ] = parser.parse();
-            ++totalBuilt;
+            ++this.constantCount;
 
             int tag = this.cPool[ i ].getTag();
             if ( ( tag == ConstantTag.LONG.TAG ) || 
@@ -34,8 +33,6 @@ public class ConstantPool{
                 ++i;
             }
         }
-        
-        return totalBuilt;
     }
     
     public ArrayList<String> getStrings(){

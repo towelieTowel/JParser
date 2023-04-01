@@ -1,7 +1,8 @@
 package j_parser;
 
 import j_parser.types.constants.*;
-import j_parser.utils.CPoolParser;
+import j_parser.utils.*;
+import j_parser.interfaces.Constant;
 
 import java.io.DataOutputStream;
 import java.io.ByteArrayOutputStream;
@@ -72,7 +73,7 @@ class ParseUtilitiesTest {
         DataOutputStream outDataStream = new DataOutputStream(outByteStream);
 
         // Write Integer tag
-        outDataStream.writeByte( ConstantTAG.INTEGER.TAG );
+        outDataStream.writeByte( ConstantTag.INTEGER.TAG );
 
         // Write mock Integer data
         outDataStream.writeInt(testCase);

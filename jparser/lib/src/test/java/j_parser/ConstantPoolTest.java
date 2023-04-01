@@ -31,7 +31,7 @@ class ConstantPoolTest {
 
 
     @BeforeAll
-    static void setUpMockStream() {
+    static void setUpMockStream() throws IOException {
 
 
         // Create a ByteArrayOutputStream
@@ -115,7 +115,6 @@ class ConstantPoolTest {
         outDataStream.writeByte(ConstantTag.PACKAGE.TAG);
         outDataStream.writeShort(TypeStates.u2TC);
 
-
         // Convert to byte[]
         byte[] byteArray = outByteStream.toByteArray();
 
@@ -135,7 +134,7 @@ class ConstantPoolTest {
         static Constant[] rawCPool; 
 
         @BeforeAll
-        void setUp() { 
+        static void setUp() throws IOException { 
         
              Init.cPoolCount = 20;
              Init.pool = new ConstantPool( ConstantPoolTest.mockStream, Init.cPoolCount );

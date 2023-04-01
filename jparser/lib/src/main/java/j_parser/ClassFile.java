@@ -28,8 +28,7 @@ public class ClassFile{
         this.minorVersion = fileStream.readUnsignedShort();
         this.majorVersion = fileStream.readUnsignedShort();
         this.constantPoolCount = fileStream.readUnsignedShort();
-        this.cPool = new ConstantPool();
-        this.cPool.create(fileStream, this.constantPoolCount);
+        this.cPool = new ConstantPool(fileStream, this.constantPoolCount);
         this.accessFlags = fileStream.readUnsignedShort();
         this.thisClass = fileStream.readUnsignedShort();
         this.superClass = fileStream.readUnsignedShort();

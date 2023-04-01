@@ -1,7 +1,7 @@
 package j_parser.utils;
 
 import j_parser.types.constants.*;
-
+import j_parser.interfaces.Constant;
 import java.io.DataInputStream;
 import java.io.IOException;
 
@@ -13,7 +13,8 @@ public class CPoolParser{
         this.in = in;
     };
 
-    public Constant parse() {
+    public Constant parse() throws IOException {
+        Constant nullConstant = null;
 
         int currentTag = in.readUnsignedByte();
         
@@ -80,12 +81,9 @@ public class CPoolParser{
             return buildConstantPackage(in);
 
         }
-        else{
-            //Need to handle this better
-            System.out.println("Found undocumented tag: " + currentTag);
+        else {
+            return nullConstant;
         }
-
-
     }
 
     private ConstantUTF buildConstantUTF(DataInputStream in) throws IOException {
