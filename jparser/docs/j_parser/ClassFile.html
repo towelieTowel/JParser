@@ -92,6 +92,23 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">ClassFile</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
+<div class="block"><p>ClassFile models the .class file and provides an interface for examining its
+ various structures. For most projects using the JParser library, creating a
+ ClassFile instance is the first step to interacting with other classes
+ provided in this library ( Although most of the other classes can be
+ instantiated independently of any ClassFile instance.</p> 
+ <p> Currently, the ClassFile can only model and provide access to the
+ following fields and structures of a .class file:</p> 
+ <ul>
+     <li>magic number</li>
+     <li>minor version</li>
+     <li>major version</li>
+     <li>constant pool count</li>
+     <li>constant pool</li>
+     <li>access flags</li>
+     <li>this class</li>
+    <li>super class</li>
+ </ul></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -104,7 +121,10 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.io.File)" class="member-name-link">ClassFile</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;classFile)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">Initialize a new ClassFile object so that it represents the underlying
+        .class file of a File object.</div>
+</div>
 </div>
 </section>
 </li>
@@ -133,7 +153,9 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getMagicNumber()" class="member-name-link">getMagicNumber</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Getter for accessing the magic number of a .class file.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getMajorVersion()" class="member-name-link">getMajorVersion</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
@@ -171,9 +193,19 @@ loadScripts(document, 'script');</script>
 <h3>ClassFile</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">ClassFile</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;classFile)</span>
           throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<div class="block">Initialize a new ClassFile object so that it represents the underlying
+        .class file of a File object. Currently throws an IOException that's thrown from any number of
+        the underlying DataInputStream or FileInputStream operations. See those
+        class' documentation for details on why an exception may have been
+        thrown. This is a known inconvenience and better exception handling is
+        planned for future releases and before the major release.</div>
 <dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>classFile</code> - File object that represents the file path to the
+        compiled java file that this class instance will model.</dd>
 <dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - Throws an IOException for any issue during
+        construction.</dd>
 </dl>
 </section>
 </li>
@@ -189,6 +221,19 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getMagicNumber()">
 <h3>getMagicNumber</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">getMagicNumber</span>()</div>
+<div class="block">Getter for accessing the magic number of a .class file.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>Returns the magic number of the .class file modeled by this
+        instance as an integer.</dd>
+<dt>See Also:</dt>
+<dd>
+<ul class="see-list-long">
+<li><a href="https://docs.oracle.com/javase/specs/jvms/se19/html/jvms-4.html#jvms-4.1"> 
+        Java Virtual Machine Specification: 4.1 The ClassFile Structure </a></li>
+</ul>
+</dd>
+</dl>
 </section>
 </li>
 <li>
