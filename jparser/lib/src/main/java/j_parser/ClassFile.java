@@ -155,7 +155,7 @@ public class ClassFile{
         @see <a href="https://docs.oracle.com/javase/specs/jvms/se19/html/jvms-4.html#jvms-4.1"> 
         Java Virtual Machine Specification: 4.1 The ClassFile Structure </a>
 
-        @return  Returns an ArrayList< String > of the access modifiers set for
+        @return  Returns an ArrayList of the access modifiers set for
         the .class file of this instance.
     */
     public ArrayList<String> getAccessModifiers(){
@@ -170,12 +170,13 @@ public class ClassFile{
     }
 
     /**
-        Gets the 
+        Gets the name of the class of this .class file. See the official Java
+        specification for details on the format this name is stored as.
+
         @see <a href="https://docs.oracle.com/javase/specs/jvms/se19/html/jvms-4.html#jvms-4.1"> 
         Java Virtual Machine Specification: 4.1 The ClassFile Structure </a>
 
-        @return  Returns the magic number of the .class file modeled by this
-        instance as an integer.
+        @return  Returns the name of the class of this .class file as a string.
     */
     public String getThisClassName(){
        ConstantClass classObj = (ConstantClass)this.cPool.getObjAtIndex(this.thisClass);
@@ -186,22 +187,46 @@ public class ClassFile{
     }
 
     /**
-        Getter for accessing the magic number of a .class file.
+        Gets the index of the constant pool table entry that represents the name
+        of this class. thisClass points to a valid utf-8 modified constant in
+        the constant pool table. That entry is the name of this class as
+        returned by getThisClassName.  
+
         @see <a href="https://docs.oracle.com/javase/specs/jvms/se19/html/jvms-4.html#jvms-4.1"> 
         Java Virtual Machine Specification: 4.1 The ClassFile Structure </a>
 
-        @return  Returns the magic number of the .class file modeled by this
-        instance as an integer.
+        @return  Returns the index of the constant pool table entry that
+        represents the name of this class.  
     */
     public int getThisClassIndex(){ return this.thisClass; }
     
     /**
-        Getter for accessing the magic number of a .class file.
+        Wrapper that calls the getStrings method of the ConstantPool instance of
+        this ClassFile. Alternatively, the programmer can get the
+        ConstantPool instance of this ClassFile by calling getConstantPool.
+        Then, calling getStrings on that returned instance.
+
+        More specifically, the strings returned by this method are actually
+        curated from all the UTF-8 objects in the constant pool table of this
+        .class file. Therefore, not all the strings represent string literal
+        values that were programmed in by the programmer of the original source
+        code that compiled to this .class file. Because the constant pool table
+        serves a similiar role as a symbols table, some of the strings may be,
+        for example, a method name or the name of a class. 
+
+        A user of this framework can also retrieve individual UTF-8 objects, or
+        all of them, by querying the ConstantPool object returned by
+        getConstantPool for UTF-8 objects. Then each UTF-8 object could be
+        queried for the string representation of the data it holds. 
+
+        See the ConstantPool documentation and the UTF-8 documentation for
+        details on the provide methods for querying. 
+
         @see <a href="https://docs.oracle.com/javase/specs/jvms/se19/html/jvms-4.html#jvms-4.1"> 
         Java Virtual Machine Specification: 4.1 The ClassFile Structure </a>
 
-        @return  Returns the magic number of the .class file modeled by this
-        instance as an integer.
+        @return  Returns an ArrayList of strings contained inside the .class
+        file.
     */
     public ArrayList<String> getStrings(){
         return this.cPool.getStrings();

@@ -92,6 +92,31 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">ConstantPool</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
+<div class="block">ConstantPool models the constant pool table as specified by the Java Virtual
+ Machine documentation. This class provides the user with an interface for
+ querying for entries found inside this table. The user can get a ConstantPool
+ instance by calling its constructor directly, however it is more common and
+ recommended that the user go through an instance of ClassFile for this
+ object. This is because ClassFile can handle the parsing of a full .class
+ file data stream, which is highly dependent on the many fields and structures
+ found of various forms throught the file. If the user has, however, a
+ specific slice of data that is a valid constant pool table, then the user
+ could instantiate a ConstantPool independent of using ClassFile. It is to be
+ noted that do so may result in inaccurate results or even exceptions to be
+ thrown. 
+
+ Currently, there is no utility for helping a user with a slice of data in
+ determing if that slice is a valid constant pool table or not, as well as how
+ many entries are in the table. This is a feature planned for the future.</div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="see-list-long">
+<li><a href="https://docs.oracle.com/javase/specs/jvms/se19/html/jvms-4.html#jvms-4.4"> 
+   Java Virtual Machine Specification: 4.4 The Constant Pool </a></li>
+</ul>
+</dd>
+</dl>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -105,7 +130,10 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.io.DataInputStream,int)" class="member-name-link">ConstantPool</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/io/DataInputStream.html" title="class or interface in java.io" class="external-link">DataInputStream</a>&nbsp;in,
  int&nbsp;constantPoolCount)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">Instantiates a ConstantPool object from the given DataInputStream and
+        the constantPoolCount.</div>
+</div>
 </div>
 </section>
 </li>
@@ -122,13 +150,21 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="interfaces/Constant.html" title="interface in j_parser.interfaces">Constant</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getObjAtIndex(int)" class="member-name-link">getObjAtIndex</a><wbr>(int&nbsp;index)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Gets a Constant object at the index of the constant pool table.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="interfaces/Constant.html" title="interface in j_parser.interfaces">Constant</a>[]</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getRawCPool()" class="member-name-link">getRawCPool</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Gets the raw Constant[] of this ConstantPool instance.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/util/ArrayList.html" title="class or interface in java.util" class="external-link">ArrayList</a>&lt;<a href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getStrings()" class="member-name-link">getStrings</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Generates an ArrayList of strings that represent all the UTF-8 objects
+        found in the underlying constant pool table of this ConstantPool
+        instance.</div>
+</div>
 </div>
 </div>
 </div>
@@ -152,9 +188,23 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">ConstantPool</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/io/DataInputStream.html" title="class or interface in java.io" class="external-link">DataInputStream</a>&nbsp;in,
  int&nbsp;constantPoolCount)</span>
              throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<div class="block">Instantiates a ConstantPool object from the given DataInputStream and
+        the constantPoolCount.</div>
 <dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>in</code> - The DataInputStream object that is to be parsed</dd>
+<dd><code>constantPoolCount</code> - The raw size of the constant pool table as
+        expressed in the underlying .class file with which this constant pool
+        table belongs to.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code></dd>
+<dt>See Also:</dt>
+<dd>
+<ul class="see-list-long">
+<li><a href="https://docs.oracle.com/javase/specs/jvms/se19/html/jvms-4.html#jvms-4.4"> 
+        Java Virtual Machine Specification: 4.4 The Constant Pool </a></li>
+</ul>
+</dd>
 </dl>
 </section>
 </li>
@@ -170,18 +220,53 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getStrings()">
 <h3>getStrings</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/util/ArrayList.html" title="class or interface in java.util" class="external-link">ArrayList</a>&lt;<a href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">getStrings</span>()</div>
+<div class="block">Generates an ArrayList of strings that represent all the UTF-8 objects
+        found in the underlying constant pool table of this ConstantPool
+        instance.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>Returns an ArrayList of UTF-8 modified strings found in the
+        constant pool table.</dd>
+<dt>See Also:</dt>
+<dd>
+<ul class="see-list-long">
+<li><a href="https://docs.oracle.com/javase/specs/jvms/se19/html/jvms-4.html#jvms-4.4"> 
+        Java Virtual Machine Specification: 4.4 The Constant Pool </a></li>
+</ul>
+</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="getObjAtIndex(int)">
 <h3>getObjAtIndex</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="interfaces/Constant.html" title="interface in j_parser.interfaces">Constant</a></span>&nbsp;<span class="element-name">getObjAtIndex</span><wbr><span class="parameters">(int&nbsp;index)</span></div>
+<div class="block">Gets a Constant object at the index of the constant pool table.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>index</code> - The raw index of the constant in the constant pool table.</dd>
+<dt>Returns:</dt>
+<dd>Returns the Constant instance associated with the constant at
+        the specified index into the constant pool table.</dd>
+<dt>See Also:</dt>
+<dd>
+<ul class="see-list-long">
+<li><a href="https://docs.oracle.com/javase/specs/jvms/se19/html/jvms-4.html#jvms-4.4"> 
+        Java Virtual Machine Specification: 4.4 The Constant Pool </a></li>
+</ul>
+</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="getRawCPool()">
 <h3>getRawCPool</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="interfaces/Constant.html" title="interface in j_parser.interfaces">Constant</a>[]</span>&nbsp;<span class="element-name">getRawCPool</span>()</div>
+<div class="block">Gets the raw Constant[] of this ConstantPool instance.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>Returns the raw Constant[].</dd>
+</dl>
 </section>
 </li>
 </ul>
