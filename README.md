@@ -1,4 +1,4 @@
-#JParser
+# JParser
 
 JParser aims to be a framework for developing scripts or full applications that
 statically analyze compiled code and the associated file. Currently, JParser
@@ -9,7 +9,7 @@ support for compiled Java classes, ELF and PE formatted binary files.
 The current release for JParser, distributed as a jar file, can be found under
 Releases.
 
-##Typical workflow
+## Typical workflow
 
 The typical workflow when using JParser would start with the instantiation of
 the ClassFile class. The ClassFile class currently provides methods for
@@ -30,7 +30,7 @@ run using Gradle with the following command: gradle runApp. The configuration
 for this command and others can be found in
 examples/mokastrings/app/build.gradle.
 
-##Compiling JParser
+## Compiling JParser
 
 Compiling JParser can be done using Gradle with the following command: gradle
 build. The command should be run from inside the jparser/lib directory. The
