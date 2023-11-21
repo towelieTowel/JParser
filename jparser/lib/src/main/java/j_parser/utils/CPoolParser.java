@@ -8,7 +8,6 @@ import java.io.IOException;
 public class CPoolParser{
     private DataInputStream in;
 
-    /* Suppress constructor */
     public CPoolParser( DataInputStream in ) {
         this.in = in;
     };
