@@ -11,8 +11,8 @@ import j_parser.utils.enums.AccessFlags;
 import j_parser.types.constants.*;
 import j_parser.interfaces.Constant;
 
-/** <p>ClassFile models the .class file and provides an interface for examining its
- * various structures. For most projects using the JParser library, creating a
+/** <p>ClassFile models the .class file and provides an interface for
+ * interacting with it. For most projects using the JParser library, creating a
  * ClassFile instance is the first step to interacting with other classes
  * provided in this library ( Although most of the other classes can be
  * instantiated independently of any ClassFile instance.</p> 
@@ -110,7 +110,7 @@ public class ClassFile{
     /**
         Gets the number of valid entries in the constant pool table of the .class file
         represented by this instance. The actual number of entries in the
-        constant pool table is not the same as the actual number of actual
+        constant pool table is not the same as the actual number of
         constant objects in the program. This is for a number of reasons. First,
         the design of the constant pool table does not allow for the index of a
         constant to be 0 ( or negative ). Therefore, index 0 is simply not used.
@@ -122,7 +122,9 @@ public class ClassFile{
         ConstantPool[ 0 ] is not a valid index. ConstantPool[ 1 ] contains the
         integer. ConstantPool[ 2 ] contains the long. ConstantPool[ 3 ] contains
         no information but is not allowed to be used by the next constant that
-        is mapped. Therefore, a .class file with this constant pool table will
+        is mapped. 
+
+		Therefore, a .class file with this constant pool table will
         have a literal constantPoolCount of 4 ( ConstantPool[ 0 ] ... [ 3 ].
         getConstantCount will return a value of 3 for this given ConstantPool.
         However, the .class file only actually contains two constants in its
