@@ -25,7 +25,6 @@ dependencies {
 }
 
 /* ----------------------Custom Tasks-------------------------*/
-
 tasks.named('test') {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
