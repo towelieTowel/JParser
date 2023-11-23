@@ -134,11 +134,11 @@ public class ConstantPool{
 //Private methods
 //------------------------------------------------------------------------
 
-	 private static Constant parse( DataInputStream in ) throws IOException {
+	private static Constant parse( DataInputStream in ) throws IOException {
 		Constant nullConstant = null;
-        int currentTag = in.readUnsignedByte();
+		int currentTag = in.readUnsignedByte();
         
-        if ( currentTag == ConstantTag.UTF.TAG ){
+		if ( currentTag == ConstantTag.UTF.TAG ){
 
 			int len = in.readUnsignedShort(); 
 			byte[] data = new byte[len];
