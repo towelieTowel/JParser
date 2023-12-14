@@ -139,7 +139,7 @@ public class ConstantPool{
 		int currentTag = in.readUnsignedByte();
         
 		if ( currentTag == ConstantTag.UTF.TAG ){
-
+			
 			int len = in.readUnsignedShort(); 
 			byte[] data = new byte[len];
 			in.read(data, 0, len);
